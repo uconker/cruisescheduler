@@ -1,1 +1,122 @@
-[]
+[
+    {
+        "id": 128485,
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Lissabon bis Tarragona",
+        "ship": "Norwegian Dawn",
+        "duration_days": 8,
+        "price_eur": 375,
+        "cabin_type": "Innenkabine",
+        "departure_month": "Jul 2026",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/128485_0/norwegian-dawn-e-hoi-paket-norwegian-cruise-line-tarragona-spanien-lissabon-portugal.html?source=search",
+        "ports": "Lissabon -> Portimão -> Motril / Granada -> Cádiz -> Gibraltar -> Ibiza -> Palma -> Tarragona",
+        "updated_at": "2026-07-02 13:56:05"
+    },
+    {
+        "id": 102801,
+        "title": "Westliches Mittelmeer Kreuzfahrt ab/bis Civitavecchia / Rom",
+        "ship": "Queen Victoria",
+        "duration_days": 8,
+        "price_eur": 450,
+        "cabin_type": "Innenkabine",
+        "departure_month": "Jul 2026",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/102801_0/queen-victoria-cunard-civitavecchia-rom-italien.html?source=search",
+        "ports": "Civitavecchia / Rom -> Marseille -> Villefranche -> sur -> Mer -> Genua -> La Spezia -> Civitavecchia / Rom",
+        "updated_at": "2026-07-02 13:56:05"
+    },
+    {
+        "id": 102807,
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Civitavecchia / Rom bis Barcelona",
+        "ship": "Queen Victoria",
+        "duration_days": 8,
+        "price_eur": 450,
+        "cabin_type": "Innenkabine",
+        "departure_month": "Jul 2026",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/102807_0/queen-victoria-cunard-barcelona-spanien-civitavecchia-rom-italien.html?source=search",
+        "ports": "Civitavecchia / Rom -> Livorno / Florenz/Pisa -> La Seyne -> sur -> Mer -> Calvi -> Valencia -> Barcelona",
+        "updated_at": "2026-07-02 13:56:05"
+    },
+    {
+        "id": 107618,
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Lissabon bis Barcelona",
+        "ship": "Norwegian Dawn",
+        "duration_days": 8,
+        "price_eur": 483,
+        "cabin_type": "Innenkabine",
+        "departure_month": "Jul 2026",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/107618_0/norwegian-dawn-e-hoi-paket-norwegian-cruise-line-barcelona-spanien-lissabon-portugal.html?source=search",
+        "ports": "Lissabon -> Portimão -> Cádiz -> Motril / Granada -> Gibraltar -> Ibiza -> Palma -> Barcelona",
+        "updated_at": "2026-07-02 13:56:05"
+    },
+    {
+        "id": 119340,
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Civitavecchia / Rom bis Barcelona",
+        "ship": "Norwegian Epic",
+        "duration_days": 8,
+        "price_eur": 503,
+        "cabin_type": "Innenkabine",
+        "departure_month": "Jul 2026",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/119340_0/norwegian-epic-e-hoi-paket-norwegian-cruise-line-barcelona-spanien-civitavecchia-rom-italien.html?source=search",
+        "ports": "Civitavecchia / Rom -> Salerno -> Catania -> Livorno / Florenz/Pisa -> Villefranche -> sur -> Mer -> Marseille -> Barcelona",
+        "updated_at": "2026-07-02 13:56:05"
+    },
+    {
+        "id": 107664,
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Civitavecchia / Rom",
+        "ship": "Norwegian Epic",
+        "duration_days": 8,
+        "price_eur": 512,
+        "cabin_type": "Innenkabine",
+        "departure_month": "Jul 2026",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/107664_0/norwegian-epic-e-hoi-paket-norwegian-cruise-line-civitavecchia-rom-italien-barcelona-spanien.html?source=search",
+        "ports": "Barcelona -> Marseille -> Villefranche -> sur -> Mer -> Livorno / Florenz/Pisa -> Messina -> Salerno -> Civitavecchia / Rom",
+        "updated_at": "2026-07-02 13:56:05"
+    },
+    {
+        "id": 107657,
+        "title": "Östliches Mittelmeer Kreuzfahrt ab Piräus / Athen bis Ravenna",
+        "ship": "Norwegian Pearl",
+        "duration_days": 8,
+        "price_eur": 560,
+        "cabin_type": "Innenkabine",
+        "departure_month": "Jul 2026",
+        "url": "https://www.e-hoi.de/kreuzfahrt/oestliches-mittelmeer-kreuzfahrten/107657_0/norwegian-pearl-e-hoi-paket-norwegian-cruise-line-ravenna-italien-piraeus-athen-griechenland.html?source=search",
+        "ports": "Piräus / Athen -> Santorini -> Katákolon / Olympia -> Korfu -> Kotor -> Split -> Koper -> Ravenna",
+        "updated_at": "2026-07-02 13:56:05"
+    },
+    {
+        "id": 107617,
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Lissabon",
+        "ship": "Norwegian Dawn",
+        "duration_days": 8,
+        "price_eur": 562,
+        "cabin_type": "Außenkabine",
+        "departure_month": "Jul 2026",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/107617_0/norwegian-dawn-e-hoi-paket-norwegian-cruise-line-lissabon-portugal-barcelona-spanien.html?source=search",
+        "ports": "Barcelona -> Palma -> Valencia -> Motril / Granada -> Gibraltar -> Cádiz -> Portimão -> Lissabon",
+        "updated_at": "2026-07-02 13:56:05"
+    },
+    {
+        "id": 124482,
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Civitavecchia / Rom",
+        "ship": "Norwegian Epic",
+        "duration_days": 8,
+        "price_eur": 567,
+        "cabin_type": "Innenkabine",
+        "departure_month": "Aug 2026",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/124482_0/norwegian-epic-e-hoi-paket-norwegian-cruise-line-civitavecchia-rom-italien-barcelona-spanien.html?source=search",
+        "ports": "Barcelona -> Marseille -> Cannes -> Livorno / Florenz/Pisa -> Messina -> Salerno -> Civitavecchia / Rom",
+        "updated_at": "2026-07-02 13:56:05"
+    },
+    {
+        "id": 107661,
+        "title": "Östliches Mittelmeer Kreuzfahrt ab Civitavecchia / Rom bis Ravenna",
+        "ship": "Norwegian Gem",
+        "duration_days": 8,
+        "price_eur": 572,
+        "cabin_type": "Innenkabine",
+        "departure_month": "Jul 2026",
+        "url": "https://www.e-hoi.de/kreuzfahrt/oestliches-mittelmeer-kreuzfahrten/107661_0/norwegian-gem-e-hoi-paket-norwegian-cruise-line-ravenna-italien-civitavecchia-rom-italien.html?source=search",
+        "ports": "Civitavecchia / Rom -> Salerno -> Catania -> Korfu -> Kotor -> Split -> Triest -> Ravenna",
+        "updated_at": "2026-07-02 13:56:05"
+    }
+]
