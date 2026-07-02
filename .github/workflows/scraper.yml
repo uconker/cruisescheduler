@@ -1,0 +1,37 @@
+name: Daily Cruise Scraper
+
+on:
+  schedule:
+    - cron: '0 0,12 * * *' # Runs at 00:00 and 12:00 UTC every day
+  workflow_dispatch: # Adds a "Run workflow" button so you can trigger it manually!
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    
+    # We need permission to save the cruises.json file back to the repo
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Scraper
+        run: python scraper.py
+
+      - name: Commit and Push new cruise data
+        run: |
+          git config --global user.name 'GitHub Action Bot'
+          git config --global user.email 'action@github.com'
+          git add cruises.json
+          git commit -m "Automated update: New cruise data" || exit 0
+          git push
