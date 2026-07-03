@@ -2,14 +2,14 @@ import requests
 import json
 import re
 import time
+from bs4 import BeautifulSoup
 
 def scrape_ehoi():
-    # Base URL using the robust fuseaction search, including 1-9 days duration and the Jul-Oct window
-    base_url = "https://www.e-hoi.de/?fuseaction=search.doSearch&sort=price-asc&departdate=01.07.2026&arrivdate=31.10.2026&daterange=01.07.2026%20-%2031.10.2026&cruisingareaid=64&reisedauer=1-5&reisedauer=6-9"
+    # Base URL using your exact dates (08.07 to 11.10) and duration (1-5 and 6-9 days)
+    base_url = "https://www.e-hoi.de/?fuseaction=search.doSearch&sort=price-asc&departdate=08.07.2026&arrivdate=11.10.2026&cruisingareaid=64&reisedauer=1-5&reisedauer=6-9"
     
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
         "Accept-Language": "de-DE,de;q=0.9"
     }
 
@@ -26,7 +26,6 @@ def scrape_ehoi():
     for p_count in passenger_counts:
         print(f"\n--- GATHERING CRUISES FOR {p_count} ADULTS ---")
         
-        # Initialize session cookie for the specific passenger count
         session.get(f"{base_url}&personen={p_count}")
         time.sleep(1)
         
@@ -86,37 +85,34 @@ def scrape_ehoi():
                 break
 
     # =================================================================
-    # STEP 2: Force e-hoi's APIs to give us the July - October Dates
+    # STEP 2: Extract Dates via the Print Backdoor using BeautifulSoup
     # =================================================================
-    print("\n--- EXTRACTING EXACT DATES FROM APIs ---")
+    print("\n--- EXTRACTING EXACT DATES FROM PRINT TABLES ---")
     
     for route_id, cruise in cruise_db.items():
         try:
             valid_dates = set()
             
-            # Hit the Print Backdoor WITHOUT injecting dates into the URL parameters. 
-            # This prevents the "URL Reflection" bug where 01.07.2026 was getting scraped falsely.
-            print_url = f"https://www.e-hoi.de/?fuseaction=print_product.showprintproduct&liRoutePlanIDs={route_id}&showArrayInfos=pricematrix"
+            # Hit the Print Backdoor WITH dates attached so it doesn't show 2025 trips
+            print_url = f"https://www.e-hoi.de/?fuseaction=print_product.showprintproduct&liRoutePlanIDs={route_id}&showArrayInfos=pricematrix&departdate=08.07.2026&arrivdate=11.10.2026"
             print_resp = session.get(print_url, timeout=10)
             
-            # REGEX A: Match explicit ranges (e.g. 04.10.2026 - 08.10.2026) to grab ONLY the DEPARTURE date
-            for match in re.finditer(r'(\d{2})\.(\d{2})\.(2026)\s*(?:-|bis)\s*\d{2}\.\d{2}\.\d{4}', print_resp.text):
-                day, month, year = match.groups()
-                if month in ['07', '08', '09', '10']: # strictly Jul, Aug, Sep, Oct
-                    valid_dates.add(f"{day}.{month}.{year}")
-                    
-            # REGEX B: Match range starts with omitted year (e.g. 08.10. - 12.10.2026)
-            for match in re.finditer(r'(\d{2})\.(\d{2})\.\s*(?:-|bis)\s*\d{2}\.\d{2}\.(2026)', print_resp.text):
-                day, month, year = match.groups()
-                if month in ['07', '08', '09', '10']:
-                    valid_dates.add(f"{day}.{month}.{year}")
+            # Parse the HTML cleanly
+            soup = BeautifulSoup(print_resp.text, 'html.parser')
 
-            # REGEX C: Match single standalone dates inside table cells just in case (<td>15.08.2026</td>)
-            for match in re.finditer(r'<td>\s*(\d{2})\.(\d{2})\.(2026)\s*</td>', print_resp.text):
-                day, month, year = match.groups()
-                if month in ['07', '08', '09', '10']:
-                    valid_dates.add(f"{day}.{month}.{year}")
-            
+            # ONLY look for dates inside HTML tables to avoid the phantom URL reflection bug
+            for table in soup.find_all('table'):
+                # Extract all raw text from the table, ignoring layout
+                text_content = table.get_text(separator=' ')
+                
+                # Match any date formatted like 08.10.2026
+                matches = re.findall(r'\b(\d{2})\.(\d{2})\.(2026)\b', text_content)
+                
+                for day, month, year in matches:
+                    # Double-check it falls strictly in July, Aug, Sept, or Oct
+                    if month in ['07', '08', '09', '10']:
+                        valid_dates.add(f"{day}.{month}.{year}")
+                        
             cruise["exact_dates"] = sorted(list(valid_dates))
             print(f"Cruise {route_id}: Found {len(valid_dates)} valid dates.")
             
