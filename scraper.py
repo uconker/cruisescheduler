@@ -94,26 +94,28 @@ def scrape_ehoi():
         try:
             valid_dates = set()
             
-            # 1. Hit the showTrips API (Explicitly forcing the date range)
-            api_url = f"https://www.e-hoi.de/?fuseaction=search.showTrips&routeplanid={route_id}&departdate=01.07.2026&arrivdate=31.10.2026"
-            api_resp = session.get(api_url, timeout=10)
-            
-            # 2. Hit the Print Backdoor (Explicitly forcing the date range)
-            print_url = f"https://www.e-hoi.de/?fuseaction=print_product.showprintproduct&liRoutePlanIDs={route_id}&showArrayInfos=pricematrix&departdate=01.07.2026&arrivdate=31.10.2026"
+            # Hit the Print Backdoor WITHOUT injecting dates into the URL parameters. 
+            # This prevents the "URL Reflection" bug where 01.07.2026 was getting scraped falsely.
+            print_url = f"https://www.e-hoi.de/?fuseaction=print_product.showprintproduct&liRoutePlanIDs={route_id}&showArrayInfos=pricematrix"
             print_resp = session.get(print_url, timeout=10)
             
-            # Combine the text from both hidden sources to ensure we miss nothing
-            combined_text = api_resp.text + " " + print_resp.text
-            
-            # REGEX A: Match standard dates (DD.MM.2026 or DD.MM.26)
-            for match in re.finditer(r'(\d{2})\.(\d{2})\.(2026|26)', combined_text):
-                if match.group(2) in ['07', '08', '09', '10']: # strictly Jul, Aug, Sep, Oct
-                    valid_dates.add(f"{match.group(1)}.{match.group(2)}.2026")
+            # REGEX A: Match explicit ranges (e.g. 04.10.2026 - 08.10.2026) to grab ONLY the DEPARTURE date
+            for match in re.finditer(r'(\d{2})\.(\d{2})\.(2026)\s*(?:-|bis)\s*\d{2}\.\d{2}\.\d{4}', print_resp.text):
+                day, month, year = match.groups()
+                if month in ['07', '08', '09', '10']: # strictly Jul, Aug, Sep, Oct
+                    valid_dates.add(f"{day}.{month}.{year}")
                     
-            # REGEX B: Match range starts (e.g. 08.10. - 12.10.2026) where the start year is hidden
-            for match in re.finditer(r'(\d{2})\.(\d{2})\.\s*(?:-|bis)\s*\d{2}\.\d{2}\.(2026|26)', combined_text):
-                if match.group(2) in ['07', '08', '09', '10']:
-                    valid_dates.add(f"{match.group(1)}.{match.group(2)}.2026")
+            # REGEX B: Match range starts with omitted year (e.g. 08.10. - 12.10.2026)
+            for match in re.finditer(r'(\d{2})\.(\d{2})\.\s*(?:-|bis)\s*\d{2}\.\d{2}\.(2026)', print_resp.text):
+                day, month, year = match.groups()
+                if month in ['07', '08', '09', '10']:
+                    valid_dates.add(f"{day}.{month}.{year}")
+
+            # REGEX C: Match single standalone dates inside table cells just in case (<td>15.08.2026</td>)
+            for match in re.finditer(r'<td>\s*(\d{2})\.(\d{2})\.(2026)\s*</td>', print_resp.text):
+                day, month, year = match.groups()
+                if month in ['07', '08', '09', '10']:
+                    valid_dates.add(f"{day}.{month}.{year}")
             
             cruise["exact_dates"] = sorted(list(valid_dates))
             print(f"Cruise {route_id}: Found {len(valid_dates)} valid dates.")
@@ -127,7 +129,7 @@ def scrape_ehoi():
     # STEP 3: Clean up and Save
     # =================================================================
     
-    # CRITICAL: Delete any cruise that STILL has no dates in our specific 4-month window
+    # CRITICAL: Delete any cruise that STILL has no dates in our specific window
     final_cruise_list = [c for c in cruise_db.values() if len(c["exact_dates"]) > 0]
 
     with open('cruises.json', 'w', encoding='utf-8') as f:
