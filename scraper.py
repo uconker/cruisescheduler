@@ -4,7 +4,7 @@ import re
 import time
 
 def scrape_ehoi():
-    # The base URL WITHOUT usersearch=1 so that pagination works correctly
+    # The clean base URL for July-Sept 2026 Mediterranean Cruises
     base_url = "https://www.e-hoi.de/?fuseaction=search.doSearch&sort=price-asc&departdate=07.07.2026&arrivdate=07.09.2026&daterange=07.07.2026_20-_2007.09.2026&cruisingareaid=64&reisedauer=6-9&filterby=cruisingareaid"
     
     headers = {
@@ -15,9 +15,8 @@ def scrape_ehoi():
 
     cruise_db = {}
     passenger_counts = [2, 3, 4]
-    pages_per_query = 3
+    pages_per_query = 3 # Scrape the first 3 pages for each occupancy type
 
-    # Use a session to maintain cookies
     session = requests.Session()
     session.headers.update(headers)
 
@@ -25,7 +24,6 @@ def scrape_ehoi():
         print(f"\n--- FINDING CRUISES FOR {p_count} ADULT OCCUPANCY ---")
         
         for page_num in range(1, pages_per_query + 1):
-            # Append the current page and passenger count to the clean base URL
             url = f"{base_url}&personen={p_count}&page={page_num}"
             print(f"Fetching page {page_num}...")
             
@@ -33,10 +31,9 @@ def scrape_ehoi():
                 response = session.get(url, timeout=15)
                 response.encoding = 'utf-8'
                 
-                # Extract the JSON embedded in the script tag
                 match = re.search(r'json_search\s*=\s*(\{.*?\});', response.text)
                 if not match:
-                    print(f"Could not find json_search on page {page_num}")
+                    print(f"Could not find json_search on page {page_num}. e-hoi might be blocking or the page structure changed.")
                     break
 
                 data = json.loads(match.group(1))
@@ -51,8 +48,18 @@ def scrape_ehoi():
                     best_price = route.get("bestprice")
 
                     if route_id not in cruise_db:
+                        # Clean HTML from port strings
                         clean_ports = re.sub(r'<[^>]*>', '', route.get("porttext", ""))
                         clean_ports = " -> ".join([p.strip() for p in clean_ports.split("-") if p.strip()])
+
+                        # Extract ALL dates directly from the 'trips' array provided in the JSON!
+                        found_dates = set()
+                        trips = route.get("trips", [])
+                        for trip in trips:
+                            # e-hoi usually formats this as DD.MM.YYYY
+                            date_str = trip.get("departdate_formatted")
+                            if date_str:
+                                found_dates.add(date_str)
 
                         cruise_db[route_id] = {
                             "id": route_id,
@@ -63,37 +70,19 @@ def scrape_ehoi():
                             "url": route.get("producturl"),
                             "ports": clean_ports,
                             "prices_per_person": {},
-                            "exact_dates": [], 
+                            "exact_dates": sorted(list(found_dates)), # Dates populated immediately!
                             "updated_at": time.strftime("%Y-%m-%d %H:%M:%S")
                         }
                     
+                    # Update pricing tier based on our loop
                     cruise_db[route_id]["prices_per_person"][f"{p_count}_adults"] = best_price
                     
-                # Small pause to be polite
+                # Small pause to avoid rate limiting
                 time.sleep(1.5) 
                 
             except Exception as e:
                 print(f"Error scraping page {page_num}: {e}")
                 break
-
-    print("\n--- FETCHING EXACT DEPARTURE DATES ---")
-    
-    for route_id, cruise_data in cruise_db.items():
-        try:
-            # The endpoint e-hoi uses to show the date slider
-            dates_url = f"https://www.e-hoi.de/?fuseaction=search.showTrips&routeplanid={route_id}"
-            dates_resp = session.get(dates_url, timeout=10)
-            
-            # Find all strings that look like dates (dd.mm.yyyy)
-            found_dates = set(re.findall(r'\d{2}\.\d{2}\.\d{4}', dates_resp.text))
-            
-            cruise_db[route_id]["exact_dates"] = sorted(list(found_dates))
-            print(f"Found {len(found_dates)} exact dates for Cruise {route_id}")
-            
-            time.sleep(1)
-            
-        except Exception as e:
-            print(f"Could not fetch dates for {route_id}: {e}")
 
     final_cruise_list = list(cruise_db.values())
 
