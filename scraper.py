@@ -6,7 +6,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 def scrape_ehoi():
-    print("Starting e-hoi Master Calendar Crawler...")
+    print("Starting e-hoi Unbounded Master Calendar Crawler...")
+    print("This script will scrape ALL available pages to build the complete database.")
     
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -19,14 +20,13 @@ def scrape_ehoi():
     cruise_db = {}
     passenger_counts = [2, 3, 4]
     
-    # Check 15 pages per group size (up to 150 dates per tier)
-    pages_per_query = 15 
+    # We use a high safety limit, but the script will naturally break when it hits the last page
+    max_pages = 3000 
     
     for p_count in passenger_counts:
-        print(f"\n--- GATHERING CALENDAR DATA FOR {p_count} ADULTS ---")
+        print(f"\n--- GATHERING ALL CALENDAR DATA FOR {p_count} ADULTS ---")
         
-        # Step 1: Prime the session with the main search URL. 
-        # usersearch=1 is crucial—it tells the server to overwrite our session with these new filters!
+        # Prime the session with the main search URL and your specific date/duration filters
         setup_url = f"https://www.e-hoi.de/mittelmeer-kreuzfahrten/fahrgebiet-64.html?usersearch=1&departdate=08.07.2026&arrivdate=11.10.2026&daterange=08.07.2026%20-%2011.10.2026&reisedauer=1-5&reisedauer=6-9&personen={p_count}"
         
         try:
@@ -36,11 +36,16 @@ def scrape_ehoi():
             print(f"Session setup failed: {e}")
         time.sleep(1)
 
-        for page_num in range(1, pages_per_query + 1):
-            # Step 2: The hidden AJAX endpoint. Notice it is now perfectly clean and matches the HTML form exactly.
+        page_num = 1
+        total_rows_extracted = 0
+
+        while page_num <= max_pages:
+            # The hidden AJAX endpoint
             ajax_url = f"https://www.e-hoi.de/?fuseaction=mod_kreuzfahrtkalender.showkreuzfahrtkalender&referenceID=64&referenceType=destination&sort=departDate_asc&page={page_num}"
             
-            print(f"Reading Calendar Page {page_num}...")
+            # Log every 50 pages to keep the GitHub Action logs clean
+            if page_num % 50 == 1 or page_num == 1:
+                print(f"Reading Calendar Pages {page_num} to {page_num+49}...")
             
             try:
                 # Add the XMLHttpRequest header so the server thinks it's a real background form submission
@@ -51,14 +56,14 @@ def scrape_ehoi():
                 response.encoding = 'utf-8'
                 
                 if not response.text.strip():
-                    print("Warning: Received empty response from server. Moving to next group size.")
+                    print(f"Warning: Received empty response on page {page_num}. Moving to next group size.")
                     break
 
                 soup = BeautifulSoup(response.text, 'html.parser')
                 
                 table = soup.find('table', class_='table')
                 if not table:
-                    print("No table found on this page. Ending pagination.")
+                    print(f"No table found on page {page_num}. Ending pagination.")
                     break
                     
                 tbody = table.find('tbody')
@@ -70,13 +75,14 @@ def scrape_ehoi():
                     break
                     
                 valid_rows = 0
+                
                 for row in rows:
                     cols = row.find_all('td')
                     if len(cols) < 6:
                         continue
                         
-                    # 1. Extract Exact Date
-                    date_text = cols[0].get_text(strip=True)
+                    # 1. Extract Exact Date (removing mobile CSS labels if present)
+                    date_text = cols[0].get_text(strip=True).replace('Termin:', '')
                     date_match = re.search(r'(\d{2}\.\d{2}\.\d{4})', date_text)
                     if not date_match:
                         continue
@@ -92,7 +98,6 @@ def scrape_ehoi():
                         
                     id_match = re.search(r'/(\d+)_\d+/', url)
                     if not id_match:
-                        # Fallback: Sometimes IDs are stored as ?routeplanid=XXXXXX
                         id_match = re.search(r'routeplanid=(\d+)', url)
                         if not id_match:
                             continue
@@ -108,20 +113,20 @@ def scrape_ehoi():
                     price_val_match = re.search(r'(\d+[\.,]?\d*)', price_text.replace('.', ''))
                     if not price_val_match:
                         continue
-                    price_val = int(price_val_match.group(1))
+                    price_val = int(price_val_match.group(1).replace('.', ''))
 
-                    # 4. Extract Ship
-                    ship_text = cols[1].get_text(separator=' ', strip=True)
-                    ship_match = re.split(r'\(', ship_text)
-                    ship_name = ship_match[0].strip() if ship_match else "Unbekannt"
+                    # 4. Extract Ship (removing mobile CSS labels)
+                    ship_text = cols[1].get_text(separator=' ', strip=True).replace('Schiff:', '').strip()
+                    ship_name = ship_text.split('(')[0].strip() if '(' in ship_text else ship_text
                     
                     # 5. Extract Duration
-                    dur_text = cols[2].get_text(strip=True)
+                    dur_text = cols[2].get_text(strip=True).replace('Dauer:', '')
                     dur_match = re.search(r'(\d+)', dur_text)
                     duration = int(dur_match.group(1)) if dur_match else 0
                     
-                    # 6. Extract Route
+                    # 6. Extract Route (removing mobile CSS labels)
                     ports_text = cols[3].get_text(separator=' ', strip=True).replace('\n', ' ')
+                    ports_text = ports_text.replace('Route:', '').strip()
                     ports_text = re.sub(r'\s+', ' ', ports_text)
                     
                     # Build Record
@@ -148,16 +153,20 @@ def scrape_ehoi():
                         cruise_db[route_id]["prices_per_person"][f"{p_count}_adults"] = price_val
                         
                     valid_rows += 1
+                    total_rows_extracted += valid_rows
                     
-                print(f"-> Extracted {valid_rows} cruise dates from page {page_num}.")
                 if valid_rows == 0:
+                    print(f"Empty table on page {page_num}. Ending pagination for {p_count} adults.")
                     break
                     
-                time.sleep(1) # Polite delay
+                page_num += 1
+                time.sleep(0.1) # Fast scraping mode to get through 900+ pages quickly
                 
             except Exception as e:
                 print(f"Error on page {page_num}: {e}")
                 break
+
+        print(f"Finished extracting {total_rows_extracted} total dates for {p_count} adults.")
 
     print("\n--- FINALIZING DATA ---")
     final_list = []
@@ -172,7 +181,7 @@ def scrape_ehoi():
     with open('cruises.json', 'w', encoding='utf-8') as f:
         json.dump(final_list, f, indent=4, ensure_ascii=False)
         
-    print(f"Mission Accomplished! Saved {len(final_list)} unique cruises with perfect dates and tiered pricing.")
+    print(f"Mission Accomplished! Saved {len(final_list)} unique cruises spanning all available dates.")
 
 if __name__ == "__main__":
     scrape_ehoi()
