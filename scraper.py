@@ -4,18 +4,18 @@ import re
 import time
 
 def scrape_ehoi():
-    # The base URL including duration filters for 1-5 and 6-9 days
-    base_url = "https://www.e-hoi.de/mittelmeer-kreuzfahrten/fahrgebiet-64.html?sort=price-asc&departdate=08.07.2026&arrivdate=11.10.2026&daterange=08.07.2026%20-%2011.10.2026&reisedauer=1-5&reisedauer=6-9&filterby=arrivdate"
+    # Base URL using the robust fuseaction search, including 1-9 days duration and the Jul-Oct window
+    base_url = "https://www.e-hoi.de/?fuseaction=search.doSearch&sort=price-asc&departdate=01.07.2026&arrivdate=31.10.2026&daterange=01.07.2026%20-%2031.10.2026&cruisingareaid=64&reisedauer=1-5&reisedauer=6-9"
     
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7"
+        "Accept-Language": "de-DE,de;q=0.9"
     }
 
     cruise_db = {}
     passenger_counts = [2, 3, 4]
-    pages_per_query = 5  # Scrape up to 5 pages per group size to ensure we get plenty of data
+    pages_per_query = 4  # Scrapes up to 4 pages per group size
 
     session = requests.Session()
     session.headers.update(headers)
@@ -26,13 +26,12 @@ def scrape_ehoi():
     for p_count in passenger_counts:
         print(f"\n--- GATHERING CRUISES FOR {p_count} ADULTS ---")
         
-        # Initialize session cookie
-        init_url = f"{base_url}&personen={p_count}"
-        session.get(init_url)
+        # Initialize session cookie for the specific passenger count
+        session.get(f"{base_url}&personen={p_count}")
         time.sleep(1)
         
         for page_num in range(1, pages_per_query + 1):
-            url = f"{init_url}&page={page_num}"
+            url = f"{base_url}&personen={p_count}&page={page_num}"
             print(f"Fetching page {page_num}...")
             
             try:
@@ -41,14 +40,12 @@ def scrape_ehoi():
                 
                 match = re.search(r'json_search\s*=\s*(\{.*?\});', response.text, re.DOTALL)
                 if not match:
-                    print(f"End of data reached or could not find json_search on page {page_num}.")
                     break
 
                 data = json.loads(match.group(1))
                 raw_routes = data.get("routen", [])
                 
                 if not raw_routes:
-                    print(f"No routes found on page {page_num}.")
                     break
                     
                 for route in raw_routes:
@@ -89,25 +86,34 @@ def scrape_ehoi():
                 break
 
     # =================================================================
-    # STEP 2: Use the Print Backdoor to get exact dates!
+    # STEP 2: Force e-hoi's APIs to give us the July - October Dates
     # =================================================================
-    print("\n--- EXTRACTING EXACT DATES VIA PRINT BACKDOOR ---")
+    print("\n--- EXTRACTING EXACT DATES FROM APIs ---")
     
     for route_id, cruise in cruise_db.items():
         try:
-            # The incredible print backdoor URL you found!
-            print_url = f"https://www.e-hoi.de/?fuseaction=print_product.showprintproduct&liRoutePlanIDs={route_id}&showArrayInfos=pricematrix"
-            print_resp = session.get(print_url, timeout=10)
-            print_resp.encoding = 'utf-8'
-            
-            # Extract all dates matching DD.MM.YYYY from the raw print HTML
-            raw_dates = set(re.findall(r'(?<!\d)(\d{2}\.\d{2}\.\d{4})(?!\d)', print_resp.text))
-            
-            # Filter strictly for July, August, September, and October 2026
             valid_dates = set()
-            for d in raw_dates:
-                if d.endswith(('.07.2026', '.08.2026', '.09.2026', '.10.2026')):
-                    valid_dates.add(d)
+            
+            # 1. Hit the showTrips API (Explicitly forcing the date range)
+            api_url = f"https://www.e-hoi.de/?fuseaction=search.showTrips&routeplanid={route_id}&departdate=01.07.2026&arrivdate=31.10.2026"
+            api_resp = session.get(api_url, timeout=10)
+            
+            # 2. Hit the Print Backdoor (Explicitly forcing the date range)
+            print_url = f"https://www.e-hoi.de/?fuseaction=print_product.showprintproduct&liRoutePlanIDs={route_id}&showArrayInfos=pricematrix&departdate=01.07.2026&arrivdate=31.10.2026"
+            print_resp = session.get(print_url, timeout=10)
+            
+            # Combine the text from both hidden sources to ensure we miss nothing
+            combined_text = api_resp.text + " " + print_resp.text
+            
+            # REGEX A: Match standard dates (DD.MM.2026 or DD.MM.26)
+            for match in re.finditer(r'(\d{2})\.(\d{2})\.(2026|26)', combined_text):
+                if match.group(2) in ['07', '08', '09', '10']: # strictly Jul, Aug, Sep, Oct
+                    valid_dates.add(f"{match.group(1)}.{match.group(2)}.2026")
+                    
+            # REGEX B: Match range starts (e.g. 08.10. - 12.10.2026) where the start year is hidden
+            for match in re.finditer(r'(\d{2})\.(\d{2})\.\s*(?:-|bis)\s*\d{2}\.\d{2}\.(2026|26)', combined_text):
+                if match.group(2) in ['07', '08', '09', '10']:
+                    valid_dates.add(f"{match.group(1)}.{match.group(2)}.2026")
             
             cruise["exact_dates"] = sorted(list(valid_dates))
             print(f"Cruise {route_id}: Found {len(valid_dates)} valid dates.")
@@ -117,13 +123,17 @@ def scrape_ehoi():
         except Exception as e:
             print(f"Could not fetch dates for {route_id}: {e}")
 
-    # Convert dictionary back to list, KEEPING ONLY those with valid dates!
+    # =================================================================
+    # STEP 3: Clean up and Save
+    # =================================================================
+    
+    # CRITICAL: Delete any cruise that STILL has no dates in our specific 4-month window
     final_cruise_list = [c for c in cruise_db.values() if len(c["exact_dates"]) > 0]
 
     with open('cruises.json', 'w', encoding='utf-8') as f:
         json.dump(final_cruise_list, f, indent=4, ensure_ascii=False)
         
-    print(f"\nCompleted! Saved {len(final_cruise_list)} unique itineraries with exact dates.")
+    print(f"\nCompleted! Saved {len(final_cruise_list)} perfectly filtered itineraries.")
 
 if __name__ == "__main__":
     scrape_ehoi()
