@@ -32,7 +32,7 @@ def scrape_ehoi():
         
         try:
             print("Configuring search session parameters...")
-            session.get(setup_url, timeout=15)
+            session.get(setup_url, timeout=60)
         except Exception as e:
             print(f"Session setup failed: {e}")
         time.sleep(1)
@@ -49,7 +49,21 @@ def scrape_ehoi():
                 ajax_headers = headers.copy()
                 ajax_headers["X-Requested-With"] = "XMLHttpRequest"
                 
-                response = session.get(ajax_url, headers=ajax_headers, timeout=15)
+                # RETRY LOGIC: Give the server 60s, and retry up to 3 times if it fails
+                max_retries = 3
+                response = None
+                for attempt in range(max_retries):
+                    try:
+                        response = session.get(ajax_url, headers=ajax_headers, timeout=60)
+                        break
+                    except requests.exceptions.Timeout:
+                        print(f"  -> Timeout! E-hoi server is taking a long time. Retrying ({attempt + 1}/{max_retries}) in 5s...")
+                        time.sleep(5)
+                
+                if not response:
+                    print(f"Giving up on page {page_num} after {max_retries} attempts.")
+                    break
+
                 response.encoding = 'utf-8'
                 
                 if not response.text.strip():
