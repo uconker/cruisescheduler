@@ -20,7 +20,7 @@
             "19.06.2026",
             "22.05.2026"
         ],
-        "updated_at": "2026-07-03 10:14:09"
+        "updated_at": "2026-07-03 10:16:37"
     },
     {
         "id": "125856",
@@ -42,7 +42,7 @@
             "23.05.2026",
             "30.05.2026"
         ],
-        "updated_at": "2026-07-03 10:14:09"
+        "updated_at": "2026-07-03 10:16:37"
     },
     {
         "id": "81395",
@@ -71,7 +71,7 @@
             "30.03.2026",
             "30.05.2026"
         ],
-        "updated_at": "2026-07-03 10:14:09"
+        "updated_at": "2026-07-03 10:16:37"
     },
     {
         "id": "126838",
@@ -96,28 +96,7 @@
             "25.01.2026",
             "26.05.2026"
         ],
-        "updated_at": "2026-07-03 10:14:09"
-    },
-    {
-        "id": "126654",
-        "title": "Westliches Mittelmeer Kreuzfahrt ab Neapel bis Savona",
-        "ship": "Costa Fascinosa",
-        "duration_days": 4,
-        "cabin_type": "Innenkabine",
-        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/126654_0/costa-fascinosa-costa-kreuzfahrten-savona-italien-neapel-italien.html?source=search",
-        "ports": "Neapel -> Civitavecchia / Rom -> Ajaccio -> Savona",
-        "prices_per_person": {
-            "2_adults": 339,
-            "3_adults": 282,
-            "4_adults": 254
-        },
-        "exact_dates": [
-            "13.06.2026",
-            "15.05.2026",
-            "30.03.2026",
-            "30.05.2026"
-        ],
-        "updated_at": "2026-07-03 10:14:09"
+        "updated_at": "2026-07-03 10:16:37"
     },
     {
         "id": "131271",
@@ -138,7 +117,28 @@
             "23.05.2026",
             "30.05.2026"
         ],
-        "updated_at": "2026-07-03 10:14:09"
+        "updated_at": "2026-07-03 10:16:37"
+    },
+    {
+        "id": "126654",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Neapel bis Savona",
+        "ship": "Costa Fascinosa",
+        "duration_days": 4,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/126654_0/costa-fascinosa-costa-kreuzfahrten-savona-italien-neapel-italien.html?source=search",
+        "ports": "Neapel -> Civitavecchia / Rom -> Ajaccio -> Savona",
+        "prices_per_person": {
+            "2_adults": 339,
+            "3_adults": 282,
+            "4_adults": 254
+        },
+        "exact_dates": [
+            "13.06.2026",
+            "15.05.2026",
+            "30.03.2026",
+            "30.05.2026"
+        ],
+        "updated_at": "2026-07-03 10:16:37"
     },
     {
         "id": "127161",
@@ -161,7 +161,7 @@
             "23.09.2026",
             "27.09.2026"
         ],
-        "updated_at": "2026-07-03 10:14:09"
+        "updated_at": "2026-07-03 10:16:37"
     },
     {
         "id": "128485",
@@ -182,7 +182,7 @@
             "17.05.2026",
             "21.06.2026"
         ],
-        "updated_at": "2026-07-03 10:14:09"
+        "updated_at": "2026-07-03 10:16:37"
     },
     {
         "id": "128804",
@@ -203,7 +203,7 @@
             "30.03.2026",
             "30.05.2026"
         ],
-        "updated_at": "2026-07-03 10:14:09"
+        "updated_at": "2026-07-03 10:16:37"
     },
     {
         "id": "131215",
@@ -227,7 +227,7 @@
             "25.01.2026",
             "26.05.2026"
         ],
-        "updated_at": "2026-07-03 10:14:09"
+        "updated_at": "2026-07-03 10:16:37"
     },
     {
         "id": "128792",
@@ -249,7 +249,7 @@
             "17.05.2026",
             "21.06.2026"
         ],
-        "updated_at": "2026-07-03 10:14:30"
+        "updated_at": "2026-07-03 10:17:02"
     },
     {
         "id": "128791",
@@ -271,7 +271,7 @@
             "17.05.2026",
             "21.06.2026"
         ],
-        "updated_at": "2026-07-03 10:14:30"
+        "updated_at": "2026-07-03 10:17:02"
     },
     {
         "id": "126281",
@@ -291,7 +291,7 @@
             "30.03.2026",
             "30.05.2026"
         ],
-        "updated_at": "2026-07-03 10:14:30"
+        "updated_at": "2026-07-03 10:17:02"
     },
     {
         "id": "102801",
@@ -308,7 +308,7 @@
             "01.06.2026",
             "18.05.2026"
         ],
-        "updated_at": "2026-07-03 10:14:30"
+        "updated_at": "2026-07-03 10:17:02"
     },
     {
         "id": "107617",
@@ -329,6 +329,6 @@
             "17.05.2026",
             "21.06.2026"
         ],
-        "updated_at": "2026-07-03 10:14:52"
+        "updated_at": "2026-07-03 10:17:31"
     }
 ]
