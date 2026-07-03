@@ -39,8 +39,8 @@ def scrape_ehoi():
 
         page_num = 1
         while page_num <= max_pages:
-            # Step 2: The hidden AJAX endpoint. Notice it is now perfectly clean and matches the HTML form exactly.
-            ajax_url = f"https://www.e-hoi.de/?fuseaction=mod_kreuzfahrtkalender.showkreuzfahrtkalender&referenceID=64&referenceType=destination&sort=departDate_asc&page={page_num}"
+            # Step 2: The hidden AJAX endpoint. We MUST include the filters directly in the URL!
+            ajax_url = f"https://www.e-hoi.de/?fuseaction=mod_kreuzfahrtkalender.showkreuzfahrtkalender&referenceID=64&referenceType=destination&sort=departDate_asc&page={page_num}&departdate=08.07.2026&arrivdate=11.10.2026&reisedauer=1-5&reisedauer=6-9&personen={p_count}"
             
             print(f"Reading Calendar Page {page_num}...")
             
