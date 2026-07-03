@@ -20,8 +20,8 @@ def scrape_ehoi():
     cruise_db = {}
     passenger_counts = [2, 3, 4]
     
-    # We use a high safety limit, but the script will naturally break when it hits the last page
-    max_pages = 3000 
+    # Cap the scrape at 200 pages since this covers everything up to late October
+    max_pages = 200 
     
     for p_count in passenger_counts:
         print(f"\n--- GATHERING CALENDAR DATA FOR {p_count} ADULTS ---")
