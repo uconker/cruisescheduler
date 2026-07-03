@@ -1,162 +1,322 @@
 [
     {
         "id": "126838",
-        "title": "Mittelmeer Kreuzfahrt ab Route: Valencia (Spanien)",
-        "ship": "Schiff: Costa Pacifica",
+        "title": "Mittelmeer Kreuzfahrt ab Valencia (Spanien)",
+        "ship": "Costa Pacifica",
         "duration_days": 4,
         "cabin_type": "Innenkabine",
         "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/126838_0/costa-pacifica-costa-kreuzfahrten-civitavecchia-rom-italien-valencia-spanien.html",
-        "ports": "Route: Valencia (Spanien) - Civitavecchia / Rom (Italien)",
+        "ports": "Valencia (Spanien) - Civitavecchia / Rom (Italien)",
         "prices_per_person": {
-            "4_adults": 329
+            "3_adults": 329
         },
         "exact_dates": [
             "08.07.2026"
         ],
-        "updated_at": "2026-07-03 13:08:35"
+        "updated_at": "2026-07-03 13:15:43"
     },
     {
         "id": "86232",
-        "title": "Mittelmeer Kreuzfahrt ab Route: Valletta (Malta)",
-        "ship": "Schiff: MSC World Europa",
+        "title": "Mittelmeer Kreuzfahrt ab Valletta (Malta)",
+        "ship": "MSC World Europa",
         "duration_days": 8,
         "cabin_type": "Innenkabine",
         "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/86232_0/msc-world-europa-msc-cruises-msc-kreuzfahrten-valletta-malta.html",
-        "ports": "Route: Valletta (Malta) - Valletta (Malta)",
+        "ports": "Valletta (Malta) - Valletta (Malta)",
         "prices_per_person": {
-            "4_adults": 1947
+            "3_adults": 1947
         },
         "exact_dates": [
             "08.07.2026"
         ],
-        "updated_at": "2026-07-03 13:08:35"
+        "updated_at": "2026-07-03 13:15:43"
     },
     {
         "id": "115388",
-        "title": "Mittelmeer Kreuzfahrt ab Route: Valencia (Spanien)",
-        "ship": "Schiff: Costa Pacifica",
+        "title": "Mittelmeer Kreuzfahrt ab Valencia (Spanien)",
+        "ship": "Costa Pacifica",
         "duration_days": 8,
         "cabin_type": "Innenkabine",
         "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/115388_0/costa-pacifica-costa-kreuzfahrten-valencia-spanien.html",
-        "ports": "Route: Valencia (Spanien) - Valencia (Spanien)",
+        "ports": "Valencia (Spanien) - Valencia (Spanien)",
         "prices_per_person": {
-            "4_adults": 1119
+            "3_adults": 1119
         },
         "exact_dates": [
             "08.07.2026"
         ],
-        "updated_at": "2026-07-03 13:08:35"
+        "updated_at": "2026-07-03 13:15:43"
     },
     {
         "id": "96908",
-        "title": "Mittelmeer Kreuzfahrt ab Route: Piräus / Athen (Griechenland)",
-        "ship": "Schiff: MSC Fantasia",
+        "title": "Mittelmeer Kreuzfahrt ab Piräus / Athen (Griechenland)",
+        "ship": "MSC Fantasia",
         "duration_days": 10,
         "cabin_type": "Innenkabine",
         "url": "https://www.e-hoi.de/kreuzfahrt/oestliches-mittelmeer-kreuzfahrten/96908_0/msc-fantasia-msc-cruises-msc-kreuzfahrten-piraeus-athen-griechenland.html",
-        "ports": "Route: Piräus / Athen (Griechenland) - Piräus / Athen (Griechenland)",
+        "ports": "Piräus / Athen (Griechenland) - Piräus / Athen (Griechenland)",
         "prices_per_person": {
-            "4_adults": 1411
+            "3_adults": 1411
         },
         "exact_dates": [
             "08.07.2026"
         ],
-        "updated_at": "2026-07-03 13:08:35"
+        "updated_at": "2026-07-03 13:15:43"
     },
     {
         "id": "119776",
-        "title": "Mittelmeer Kreuzfahrt ab Route: Palma (Mallorca, Balearische Inseln)",
-        "ship": "Schiff: Silver Shadow",
+        "title": "Mittelmeer Kreuzfahrt ab Palma (Mallorca, Balearische Inseln)",
+        "ship": "Silver Shadow",
         "duration_days": 6,
         "cabin_type": "Innenkabine",
         "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/119776_0/silver-shadow-silversea-nizza-frankreich-palma-mallorca-balearische-inseln.html",
-        "ports": "Route: Palma (Mallorca, Balearische Inseln) - Nizza (Frankreich)",
+        "ports": "Palma (Mallorca, Balearische Inseln) - Nizza (Frankreich)",
         "prices_per_person": {
-            "4_adults": 4950
+            "3_adults": 4950
         },
         "exact_dates": [
             "08.07.2026"
         ],
-        "updated_at": "2026-07-03 13:08:35"
+        "updated_at": "2026-07-03 13:15:43"
     },
     {
         "id": "74113",
-        "title": "Mittelmeer Kreuzfahrt ab Route: Civitavecchia / Rom (Italien)",
-        "ship": "Schiff: MSC Grandiosa",
+        "title": "Mittelmeer Kreuzfahrt ab Civitavecchia / Rom (Italien)",
+        "ship": "MSC Grandiosa",
         "duration_days": 8,
         "cabin_type": "Innenkabine",
         "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/74113_0/msc-grandiosa-msc-cruises-msc-kreuzfahrten-civitavecchia-rom-italien.html",
-        "ports": "Route: Civitavecchia / Rom (Italien) - Civitavecchia / Rom (Italien)",
+        "ports": "Civitavecchia / Rom (Italien) - Civitavecchia / Rom (Italien)",
         "prices_per_person": {
-            "4_adults": 3457
+            "3_adults": 3457
         },
         "exact_dates": [
             "08.07.2026"
         ],
-        "updated_at": "2026-07-03 13:08:35"
+        "updated_at": "2026-07-03 13:15:43"
     },
     {
         "id": "117206",
-        "title": "Mittelmeer Kreuzfahrt ab Route: Cagliari (Sardinien, Italien)",
-        "ship": "Schiff: MSC Splendida",
+        "title": "Mittelmeer Kreuzfahrt ab Cagliari (Sardinien, Italien)",
+        "ship": "MSC Splendida",
         "duration_days": 8,
         "cabin_type": "Innenkabine",
         "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/117206_0/msc-splendida-msc-cruises-msc-kreuzfahrten-cagliari-sardinien-italien.html",
-        "ports": "Route: Cagliari (Sardinien, Italien) - Cagliari (Sardinien, Italien)",
+        "ports": "Cagliari (Sardinien, Italien) - Cagliari (Sardinien, Italien)",
         "prices_per_person": {
-            "4_adults": 1177
+            "3_adults": 1177
         },
         "exact_dates": [
             "08.07.2026"
         ],
-        "updated_at": "2026-07-03 13:08:35"
+        "updated_at": "2026-07-03 13:15:43"
     },
     {
         "id": "125856",
-        "title": "Mittelmeer Kreuzfahrt ab Route: Palermo (Sizilien, Italien)",
-        "ship": "Schiff: Costa Smeralda",
+        "title": "Mittelmeer Kreuzfahrt ab Palermo (Sizilien, Italien)",
+        "ship": "Costa Smeralda",
         "duration_days": 4,
         "cabin_type": "Innenkabine",
         "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/125856_0/costa-smeralda-costa-kreuzfahrten-marseille-frankreich-palermo-sizilien-italien.html",
-        "ports": "Route: Palermo (Sizilien, Italien) - Marseille (Frankreich)",
+        "ports": "Palermo (Sizilien, Italien) - Marseille (Frankreich)",
         "prices_per_person": {
-            "4_adults": 319
+            "3_adults": 319
         },
         "exact_dates": [
             "09.07.2026"
         ],
-        "updated_at": "2026-07-03 13:08:35"
+        "updated_at": "2026-07-03 13:15:43"
     },
     {
         "id": "113928",
-        "title": "Mittelmeer Kreuzfahrt ab Route: Palermo (Sizilien, Italien)",
-        "ship": "Schiff: MSC Splendida",
+        "title": "Mittelmeer Kreuzfahrt ab Palermo (Sizilien, Italien)",
+        "ship": "MSC Splendida",
         "duration_days": 8,
         "cabin_type": "Innenkabine",
         "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/113928_0/msc-splendida-msc-cruises-msc-kreuzfahrten-palermo-sizilien-italien.html",
-        "ports": "Route: Palermo (Sizilien, Italien) - Palermo (Sizilien, Italien)",
+        "ports": "Palermo (Sizilien, Italien) - Palermo (Sizilien, Italien)",
         "prices_per_person": {
-            "4_adults": 1117
+            "3_adults": 1117
         },
         "exact_dates": [
             "09.07.2026"
         ],
-        "updated_at": "2026-07-03 13:08:35"
+        "updated_at": "2026-07-03 13:15:43"
     },
     {
         "id": "113981",
-        "title": "Mittelmeer Kreuzfahrt ab Route: Marseille (Frankreich)",
-        "ship": "Schiff: MSC Orchestra",
+        "title": "Mittelmeer Kreuzfahrt ab Marseille (Frankreich)",
+        "ship": "MSC Orchestra",
         "duration_days": 8,
         "cabin_type": "Innenkabine",
         "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/113981_0/msc-orchestra-msc-cruises-msc-kreuzfahrten-marseille-frankreich.html",
-        "ports": "Route: Marseille (Frankreich) - Marseille (Frankreich)",
+        "ports": "Marseille (Frankreich) - Marseille (Frankreich)",
         "prices_per_person": {
-            "4_adults": 1477
+            "3_adults": 1477
         },
         "exact_dates": [
             "09.07.2026"
         ],
-        "updated_at": "2026-07-03 13:08:35"
+        "updated_at": "2026-07-03 13:15:43"
+    },
+    {
+        "id": "81284",
+        "title": "Mittelmeer Kreuzfahrt ab Civitavecchia / Rom (Italien)",
+        "ship": "Costa Toscana",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/81284_0/costa-toscana-costa-kreuzfahrten-civitavecchia-rom-italien.html",
+        "ports": "Civitavecchia / Rom (Italien) - Civitavecchia / Rom (Italien)",
+        "prices_per_person": {
+            "3_adults": 849
+        },
+        "exact_dates": [
+            "09.07.2026"
+        ],
+        "updated_at": "2026-07-03 13:15:56"
+    },
+    {
+        "id": "114372",
+        "title": "Mittelmeer Kreuzfahrt ab Barcelona (Spanien)",
+        "ship": "MSC Seaview",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/114372_0/msc-seaview-msc-cruises-msc-kreuzfahrten-barcelona-spanien.html",
+        "ports": "Barcelona (Spanien) - Barcelona (Spanien)",
+        "prices_per_person": {
+            "3_adults": 2807
+        },
+        "exact_dates": [
+            "09.07.2026"
+        ],
+        "updated_at": "2026-07-03 13:15:56"
+    },
+    {
+        "id": "117466",
+        "title": "Mittelmeer Kreuzfahrt ab Palma (Mallorca, Balearische Inseln)",
+        "ship": "Mein Schiff Flow",
+        "duration_days": 11,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/117466_0/mein-schiff-flow-tui-cruises-palma-mallorca-balearische-inseln.html",
+        "ports": "Palma (Mallorca, Balearische Inseln) - Palma (Mallorca, Balearische Inseln)",
+        "prices_per_person": {
+            "3_adults": 5649
+        },
+        "exact_dates": [
+            "09.07.2026"
+        ],
+        "updated_at": "2026-07-03 13:15:56"
+    },
+    {
+        "id": "118673",
+        "title": "Mittelmeer Kreuzfahrt ab Neapel (Italien)",
+        "ship": "MSC Divina",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/oestliches-mittelmeer-kreuzfahrten/118673_0/msc-divina-msc-cruises-msc-kreuzfahrten-neapel-italien.html",
+        "ports": "Neapel (Italien) - Neapel (Italien)",
+        "prices_per_person": {
+            "3_adults": 1027
+        },
+        "exact_dates": [
+            "09.07.2026"
+        ],
+        "updated_at": "2026-07-03 13:15:56"
+    },
+    {
+        "id": "62937",
+        "title": "Mittelmeer Kreuzfahrt ab Palma (Mallorca, Balearische Inseln)",
+        "ship": "AIDAstella",
+        "duration_days": 11,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/62937_0/aidastella-aida-palma-mallorca-balearische-inseln.html",
+        "ports": "Palma (Mallorca, Balearische Inseln) - Palma (Mallorca, Balearische Inseln)",
+        "prices_per_person": {
+            "3_adults": 2030
+        },
+        "exact_dates": [
+            "09.07.2026"
+        ],
+        "updated_at": "2026-07-03 13:15:56"
+    },
+    {
+        "id": "117111",
+        "title": "Mittelmeer Kreuzfahrt ab Valletta (Malta)",
+        "ship": "MSC Splendida",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/117111_0/msc-splendida-msc-cruises-msc-kreuzfahrten-valletta-malta.html",
+        "ports": "Valletta (Malta) - Valletta (Malta)",
+        "prices_per_person": {
+            "3_adults": 997
+        },
+        "exact_dates": [
+            "10.07.2026"
+        ],
+        "updated_at": "2026-07-03 13:15:56"
+    },
+    {
+        "id": "118671",
+        "title": "Mittelmeer Kreuzfahrt ab Civitavecchia / Rom (Italien)",
+        "ship": "MSC Divina",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/oestliches-mittelmeer-kreuzfahrten/118671_0/msc-divina-msc-cruises-msc-kreuzfahrten-civitavecchia-rom-italien.html",
+        "ports": "Civitavecchia / Rom (Italien) - Civitavecchia / Rom (Italien)",
+        "prices_per_person": {
+            "3_adults": 1608
+        },
+        "exact_dates": [
+            "10.07.2026"
+        ],
+        "updated_at": "2026-07-03 13:15:56"
+    },
+    {
+        "id": "81286",
+        "title": "Mittelmeer Kreuzfahrt ab Genua (Italien)",
+        "ship": "Costa Toscana",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/81286_0/costa-toscana-costa-kreuzfahrten-genua-italien.html",
+        "ports": "Genua (Italien) - Genua (Italien)",
+        "prices_per_person": {
+            "3_adults": 679
+        },
+        "exact_dates": [
+            "10.07.2026"
+        ],
+        "updated_at": "2026-07-03 13:15:56"
+    },
+    {
+        "id": "72191",
+        "title": "Mittelmeer Kreuzfahrt ab Barcelona (Spanien)",
+        "ship": "AIDAcosma",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/72191_0/aidacosma-aida-barcelona-spanien.html",
+        "ports": "Barcelona (Spanien) - Barcelona (Spanien)",
+        "prices_per_person": {
+            "3_adults": 1410
+        },
+        "exact_dates": [
+            "10.07.2026"
+        ],
+        "updated_at": "2026-07-03 13:15:56"
+    },
+    {
+        "id": "109262",
+        "title": "Mittelmeer Kreuzfahrt ab Marseille (Frankreich)",
+        "ship": "MSC Seaview",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/109262_0/msc-seaview-msc-cruises-msc-kreuzfahrten-marseille-frankreich.html",
+        "ports": "Marseille (Frankreich) - Marseille (Frankreich)",
+        "prices_per_person": {
+            "3_adults": 3607
+        },
+        "exact_dates": [
+            "10.07.2026"
+        ],
+        "updated_at": "2026-07-03 13:15:56"
     }
 ]
