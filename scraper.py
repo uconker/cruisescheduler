@@ -1,12 +1,10 @@
 import requests
-from bs4 import BeautifulSoup
 import json
 import re
 import time
 
 def scrape_ehoi():
-    # The updated base URL including your new date range and duration filters (1-9 days)
-    # Notice we kept usersearch=1 OUT of this base string so pagination works
+    # The exact URL you provided, formatted for the scraper
     base_url = "https://www.e-hoi.de/mittelmeer-kreuzfahrten/fahrgebiet-64.html?sort=price-asc&departdate=08.07.2026&arrivdate=11.10.2026&daterange=08.07.2026%20-%2011.10.2026&reisedauer=1-5&reisedauer=6-9&filterby=arrivdate"
     
     headers = {
@@ -17,7 +15,7 @@ def scrape_ehoi():
 
     cruise_db = {}
     passenger_counts = [2, 3, 4]
-    pages_per_query = 3 # Scrape the first 3 pages
+    pages_per_query = 4 # Scrape up to 4 pages per group size
 
     session = requests.Session()
     session.headers.update(headers)
@@ -25,7 +23,7 @@ def scrape_ehoi():
     for p_count in passenger_counts:
         print(f"\n--- FINDING CRUISES FOR {p_count} ADULT OCCUPANCY ---")
         
-        # Initialize session for this passenger count
+        # Initialize the session cookie for this specific group size
         init_url = f"{base_url}&personen={p_count}"
         session.get(init_url)
         time.sleep(1)
@@ -37,123 +35,89 @@ def scrape_ehoi():
             try:
                 response = session.get(url, timeout=15)
                 response.encoding = 'utf-8'
-                soup = BeautifulSoup(response.text, 'html.parser')
                 
-                # e-hoi usually wraps search results in divs with class 'route' or similar
-                # We need to look for the cards that contain the "Termine" section
-                # Based on typical e-hoi structure, we look for list items or divs that hold a route
-                cruise_cards = soup.find_all('div', class_=re.compile(r'route.*|result.*'))
-                
-                # If we can't find cards the standard way, let's try a broader search for elements containing "Termine:"
-                if not cruise_cards:
-                     term_elements = soup.find_all(string=re.compile("Termine:"))
-                     cruise_cards = [elem.find_parent('div', class_=True) for elem in term_elements if elem.find_parent('div', class_=True)]
-                     # Filter none
-                     cruise_cards = [card for card in cruise_cards if card]
-                     # Go up a few levels to get the whole card
-                     if cruise_cards:
-                         cruise_cards = [card.parent.parent for card in cruise_cards if card.parent and card.parent.parent]
+                # Extract the hidden data layer from the raw HTML
+                match = re.search(r'json_search\s*=\s*(\{.*?\});', response.text, re.DOTALL)
+                if not match:
+                    print(f"End of data reached on page {page_num}.")
+                    break
 
-                if not cruise_cards:
-                    print(f"No cruise cards found on page {page_num}. Trying next page.")
+                try:
+                    data = json.loads(match.group(1))
+                except json.JSONDecodeError:
+                    print(f"Failed to read data format on page {page_num}.")
+                    break
+
+                raw_routes = data.get("routen", [])
+                
+                if not raw_routes:
+                    print(f"No routes found on page {page_num}.")
                     break
                     
-                found_on_page = 0
-                for card in cruise_cards:
-                    # Attempt to extract ID from links or data attributes
-                    link_elem = card.find('a', href=re.compile(r'/kreuzfahrt/.*'))
-                    if not link_elem:
-                        continue
-                        
-                    url_str = link_elem.get('href')
-                    if url_str.startswith('/'):
-                        url_str = "https://www.e-hoi.de" + url_str
-                        
-                    # Extract ID from URL (e.g., .../128485_0/...)
-                    id_match = re.search(r'/(\d+)_\d+/', url_str)
-                    if not id_match:
-                        continue
-                    route_id = id_match.group(1)
-                    
-                    # Extract Price
-                    price_elem = card.find(class_=re.compile(r'price|preis', re.I))
-                    best_price = None
-                    if price_elem:
-                        # Find the first number in the text
-                        price_match = re.search(r'(\d+[\.,]?\d*)', price_elem.text.replace('.', ''))
-                        if price_match:
-                            best_price = int(price_match.group(1))
+                for route in raw_routes:
+                    route_id = str(route.get("routeplanid", ""))
+                    best_price = route.get("bestprice")
 
-                    if not best_price:
-                         continue # Skip if we can't find a price
+                    if not route_id:
+                        continue
 
                     if route_id not in cruise_db:
-                        # Extract Title
-                        title_elem = card.find('h2') or card.find('h3') or link_elem
-                        title = title_elem.text.strip() if title_elem else "Unbekannte Kreuzfahrt"
-                        
-                        # Extract Ship & Duration & Cabin - Usually in a subtitle or list
-                        # This is tricky without exact HTML, so we do generic text searches
-                        text_content = card.text
-                        
-                        ship_match = re.search(r'(Costa|MSC|AIDA|Norwegian|Mein Schiff|Queen)\s+([A-Za-z]+)', text_content)
-                        ship = ship_match.group(0) if ship_match else "Unbekanntes Schiff"
-                        
-                        dur_match = re.search(r'(\d+)\s+Tage', text_content)
-                        duration = int(dur_match.group(1)) if dur_match else 0
-                        
-                        cabin_match = re.search(r'(Innenkabine|Außenkabine|Balkonkabine|Suite)', text_content)
-                        cabin = cabin_match.group(1) if cabin_match else "Innenkabine"
+                        clean_ports = re.sub(r'<[^>]*>', '', route.get("porttext", ""))
+                        clean_ports = " -> ".join([p.strip() for p in clean_ports.split("-") if p.strip()])
 
-                        # Extract Dates based on the screenshot format: "08.10. - 12.10.2026 | ..."
-                        exact_dates = []
-                        term_blocks = card.find_all(string=re.compile(r'Termine:'))
-                        for block in term_blocks:
-                            parent = block.parent
-                            if parent and parent.parent:
-                                dates_text = parent.parent.text
-                                # Find all start dates in a range like "08.10. - 12.10.2026"
-                                # We capture the start DD.MM. and append the year from the end
-                                date_pairs = re.findall(r'(\d{2}\.\d{2}\.)\s*-\s*\d{2}\.\d{2}\.(\d{4})', dates_text)
-                                for day_month, year in date_pairs:
-                                     exact_dates.append(f"{day_month}{year}")
-                                     
-                        # Deduplicate and sort dates
-                        exact_dates = sorted(list(set(exact_dates)))
+                        # --- THE AGGRESSIVE DATE EXTRACTOR ---
+                        # Convert the entire route object to a string to hunt for dates
+                        route_str = json.dumps(route)
+                        found_dates = set()
+
+                        # 1. Find standard exact dates: 08.10.2026
+                        dates_dmy = re.findall(r'(?<!\d)(\d{2}\.\d{2}\.\d{4})(?!\d)', route_str)
+                        found_dates.update(dates_dmy)
+
+                        # 2. Find internal system dates: 2026-10-08 -> Convert to 08.10.2026
+                        dates_ymd = re.findall(r'(?<!\d)(\d{4}-\d{2}-\d{2})(?!\d)', route_str)
+                        for ymd in dates_ymd:
+                            parts = ymd.split('-')
+                            if len(parts) == 3:
+                                found_dates.add(f"{parts[2]}.{parts[1]}.{parts[0]}")
+
+                        # 3. Find ranges from your screenshot: "08.10. - 12.10.2026" -> Extract "08.10.2026"
+                        pairs = re.findall(r'(\d{2}\.\d{2}\.)\s*(?:-|bis)\s*\d{2}\.\d{2}\.(\d{4})', route_str)
+                        for dm, yyyy in pairs:
+                            found_dates.add(f"{dm}{yyyy}")
+
+                        # Filter out bad dates (must contain 2026 based on your search)
+                        valid_dates = [d for d in found_dates if "2026" in d]
 
                         cruise_db[route_id] = {
                             "id": route_id,
-                            "title": title,
-                            "ship": ship,
-                            "duration_days": duration,
-                            "cabin_type": cabin,
-                            "url": url_str,
-                            "ports": "Routen-Details siehe Link", # Ports are hard to scrape from list view reliably
+                            "title": route.get("routetitle", "Unbekannte Route"),
+                            "ship": route.get("ship", "Unbekanntes Schiff"),
+                            "duration_days": route.get("duration", ""),
+                            "cabin_type": route.get("kabine", ""),
+                            "url": route.get("producturl", f"https://www.e-hoi.de/kreuzfahrt/{route_id}"),
+                            "ports": clean_ports,
                             "prices_per_person": {},
-                            "exact_dates": exact_dates,
+                            "exact_dates": sorted(valid_dates),
                             "updated_at": time.strftime("%Y-%m-%d %H:%M:%S")
                         }
                     
-                    # Update pricing tier
-                    cruise_db[route_id]["prices_per_person"][f"{p_count}_adults"] = best_price
-                    found_on_page += 1
+                    # Update pricing tier for the group size
+                    if best_price:
+                        cruise_db[route_id]["prices_per_person"][f"{p_count}_adults"] = best_price
                     
-                print(f"Found {found_on_page} items on this page.")
-                time.sleep(2) # Be polite
+                time.sleep(1.5) 
                 
             except Exception as e:
                 print(f"Error scraping page {page_num}: {e}")
                 break
 
     final_cruise_list = list(cruise_db.values())
-    
-    # Filter to only include cruises where we found dates
-    # final_cruise_list = [c for c in final_cruise_list if len(c['exact_dates']) > 0]
 
     with open('cruises.json', 'w', encoding='utf-8') as f:
         json.dump(final_cruise_list, f, indent=4, ensure_ascii=False)
         
-    print(f"\nCompleted! Saved {len(final_cruise_list)} unique itineraries.")
+    print(f"\nCompleted! Saved {len(final_cruise_list)} unique itineraries with exact dates.")
 
 if __name__ == "__main__":
     scrape_ehoi()
