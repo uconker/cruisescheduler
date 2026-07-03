@@ -19,34 +19,46 @@ def scrape_ehoi():
     cruise_db = {}
     passenger_counts = [2, 3, 4]
     
-    # Check 10 pages per group size (up to 100 dates per tier)
-    pages_per_query = 10 
+    # Check 15 pages per group size (up to 150 dates per tier)
+    pages_per_query = 15 
     
     for p_count in passenger_counts:
         print(f"\n--- GATHERING CALENDAR DATA FOR {p_count} ADULTS ---")
         
-        # Prime the session with the main search URL so e-hoi registers our filters
-        setup_url = f"https://www.e-hoi.de/mittelmeer-kreuzfahrten/fahrgebiet-64.html?departdate=08.07.2026&arrivdate=11.10.2026&reisedauer=1-5&reisedauer=6-9&personen={p_count}"
+        # Step 1: Prime the session with the main search URL. 
+        # usersearch=1 is crucial—it tells the server to overwrite our session with these new filters!
+        setup_url = f"https://www.e-hoi.de/mittelmeer-kreuzfahrten/fahrgebiet-64.html?usersearch=1&departdate=08.07.2026&arrivdate=11.10.2026&daterange=08.07.2026%20-%2011.10.2026&reisedauer=1-5&reisedauer=6-9&personen={p_count}"
+        
         try:
+            print("Configuring search session parameters...")
             session.get(setup_url, timeout=15)
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Session setup failed: {e}")
         time.sleep(1)
 
         for page_num in range(1, pages_per_query + 1):
-            # The hidden AJAX endpoint that returns the calendar table directly
-            ajax_url = f"https://www.e-hoi.de/?fuseaction=mod_kreuzfahrtkalender.showkreuzfahrtkalender&referenceID=64&referenceType=destination&sort=departDate_asc&departdate=08.07.2026&arrivdate=11.10.2026&reisedauer=1-5&reisedauer=6-9&page={page_num}&personen={p_count}"
+            # Step 2: The hidden AJAX endpoint. Notice it is now perfectly clean and matches the HTML form exactly.
+            ajax_url = f"https://www.e-hoi.de/?fuseaction=mod_kreuzfahrtkalender.showkreuzfahrtkalender&referenceID=64&referenceType=destination&sort=departDate_asc&page={page_num}"
             
             print(f"Reading Calendar Page {page_num}...")
             
             try:
-                response = session.get(ajax_url, timeout=15)
+                # Add the XMLHttpRequest header so the server thinks it's a real background form submission
+                ajax_headers = headers.copy()
+                ajax_headers["X-Requested-With"] = "XMLHttpRequest"
+                
+                response = session.get(ajax_url, headers=ajax_headers, timeout=15)
                 response.encoding = 'utf-8'
+                
+                if not response.text.strip():
+                    print("Warning: Received empty response from server. Moving to next group size.")
+                    break
+
                 soup = BeautifulSoup(response.text, 'html.parser')
                 
                 table = soup.find('table', class_='table')
                 if not table:
-                    print("No more table rows found. Moving to next group size.")
+                    print("No table found on this page. Ending pagination.")
                     break
                     
                 tbody = table.find('tbody')
@@ -80,17 +92,20 @@ def scrape_ehoi():
                         
                     id_match = re.search(r'/(\d+)_\d+/', url)
                     if not id_match:
-                        continue
+                        # Fallback: Sometimes IDs are stored as ?routeplanid=XXXXXX
+                        id_match = re.search(r'routeplanid=(\d+)', url)
+                        if not id_match:
+                            continue
                     route_id = id_match.group(1)
                     
                     # 3. Extract Price for this specific passenger count
-                    price_div = cols[5].find('div', class_=re.compile(r'price'))
-                    if not price_div:
-                        continue
-                    price_em = price_div.find('em')
-                    if not price_em:
-                        continue
-                    price_val_match = re.search(r'(\d+[\.,]?\d*)', price_em.text.replace('.', ''))
+                    price_em = cols[5].find('em')
+                    if price_em:
+                        price_text = price_em.text
+                    else:
+                        price_text = cols[5].get_text()
+                        
+                    price_val_match = re.search(r'(\d+[\.,]?\d*)', price_text.replace('.', ''))
                     if not price_val_match:
                         continue
                     price_val = int(price_val_match.group(1))
@@ -134,6 +149,7 @@ def scrape_ehoi():
                         
                     valid_rows += 1
                     
+                print(f"-> Extracted {valid_rows} cruise dates from page {page_num}.")
                 if valid_rows == 0:
                     break
                     
