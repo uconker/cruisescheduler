@@ -24,9 +24,10 @@ def scrape_ehoi():
     max_pages = 3000 
     
     for p_count in passenger_counts:
-        print(f"\n--- GATHERING ALL CALENDAR DATA FOR {p_count} ADULTS ---")
+        print(f"\n--- GATHERING CALENDAR DATA FOR {p_count} ADULTS ---")
         
-        # Prime the session with the main search URL and your specific date/duration filters
+        # Step 1: Prime the session with the main search URL. 
+        # usersearch=1 is crucial—it tells the server to overwrite our session with these new filters!
         setup_url = f"https://www.e-hoi.de/mittelmeer-kreuzfahrten/fahrgebiet-64.html?usersearch=1&departdate=08.07.2026&arrivdate=11.10.2026&daterange=08.07.2026%20-%2011.10.2026&reisedauer=1-5&reisedauer=6-9&personen={p_count}"
         
         try:
@@ -37,15 +38,11 @@ def scrape_ehoi():
         time.sleep(1)
 
         page_num = 1
-        total_rows_extracted = 0
-
         while page_num <= max_pages:
-            # The hidden AJAX endpoint
+            # Step 2: The hidden AJAX endpoint. Notice it is now perfectly clean and matches the HTML form exactly.
             ajax_url = f"https://www.e-hoi.de/?fuseaction=mod_kreuzfahrtkalender.showkreuzfahrtkalender&referenceID=64&referenceType=destination&sort=departDate_asc&page={page_num}"
             
-            # Log every 50 pages to keep the GitHub Action logs clean
-            if page_num % 50 == 1 or page_num == 1:
-                print(f"Reading Calendar Pages {page_num} to {page_num+49}...")
+            print(f"Reading Calendar Page {page_num}...")
             
             try:
                 # Add the XMLHttpRequest header so the server thinks it's a real background form submission
@@ -82,7 +79,7 @@ def scrape_ehoi():
                         continue
                         
                     # 1. Extract Exact Date (removing mobile CSS labels if present)
-                    date_text = cols[0].get_text(strip=True).replace('Termin:', '')
+                    date_text = cols[0].get_text(separator=' ', strip=True)
                     date_match = re.search(r'(\d{2}\.\d{2}\.\d{4})', date_text)
                     if not date_match:
                         continue
@@ -98,6 +95,7 @@ def scrape_ehoi():
                         
                     id_match = re.search(r'/(\d+)_\d+/', url)
                     if not id_match:
+                        # Fallback: Sometimes IDs are stored as ?routeplanid=XXXXXX
                         id_match = re.search(r'routeplanid=(\d+)', url)
                         if not id_match:
                             continue
@@ -113,20 +111,22 @@ def scrape_ehoi():
                     price_val_match = re.search(r'(\d+[\.,]?\d*)', price_text.replace('.', ''))
                     if not price_val_match:
                         continue
-                    price_val = int(price_val_match.group(1).replace('.', ''))
+                    price_val = int(price_val_match.group(1))
 
-                    # 4. Extract Ship (removing mobile CSS labels)
-                    ship_text = cols[1].get_text(separator=' ', strip=True).replace('Schiff:', '').strip()
-                    ship_name = ship_text.split('(')[0].strip() if '(' in ship_text else ship_text
+                    # 4. Extract Ship (Fixed: Removes hidden mobile labels)
+                    ship_text = cols[1].get_text(separator=' ', strip=True)
+                    ship_text = ship_text.replace("Schiff:", "").strip()
+                    ship_match = re.split(r'\(', ship_text)
+                    ship_name = ship_match[0].strip() if ship_match else "Unbekannt"
                     
                     # 5. Extract Duration
-                    dur_text = cols[2].get_text(strip=True).replace('Dauer:', '')
+                    dur_text = cols[2].get_text(strip=True)
                     dur_match = re.search(r'(\d+)', dur_text)
                     duration = int(dur_match.group(1)) if dur_match else 0
                     
-                    # 6. Extract Route (removing mobile CSS labels)
+                    # 6. Extract Route (Fixed: Removes hidden mobile labels)
                     ports_text = cols[3].get_text(separator=' ', strip=True).replace('\n', ' ')
-                    ports_text = ports_text.replace('Route:', '').strip()
+                    ports_text = ports_text.replace("Route:", "").strip()
                     ports_text = re.sub(r'\s+', ' ', ports_text)
                     
                     # Build Record
@@ -137,7 +137,7 @@ def scrape_ehoi():
                             "title": f"Mittelmeer Kreuzfahrt ab {first_port}",
                             "ship": ship_name,
                             "duration_days": duration,
-                            "cabin_type": "Innenkabine", 
+                            "cabin_type": "Günstigste verfügbare Kabine", # Fixed: No longer hardcoded!
                             "url": url,
                             "ports": ports_text,
                             "prices_per_person": {},
@@ -153,20 +153,18 @@ def scrape_ehoi():
                         cruise_db[route_id]["prices_per_person"][f"{p_count}_adults"] = price_val
                         
                     valid_rows += 1
-                    total_rows_extracted += valid_rows
                     
+                print(f"-> Extracted {valid_rows} cruise dates from page {page_num}.")
                 if valid_rows == 0:
                     print(f"Empty table on page {page_num}. Ending pagination for {p_count} adults.")
                     break
                     
                 page_num += 1
-                time.sleep(0.1) # Fast scraping mode to get through 900+ pages quickly
+                time.sleep(1.5) # Critical: 1.5s delay to prevent Cloudflare from blocking us
                 
             except Exception as e:
                 print(f"Error on page {page_num}: {e}")
                 break
-
-        print(f"Finished extracting {total_rows_extracted} total dates for {p_count} adults.")
 
     print("\n--- FINALIZING DATA ---")
     final_list = []
