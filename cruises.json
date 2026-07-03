@@ -1,1 +1,906 @@
-[]
+[
+    {
+        "id": "128805",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Marseille",
+        "ship": "Costa Diadema",
+        "duration_days": 2,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/128805_0/costa-diadema-costa-kreuzfahrten-marseille-frankreich-barcelona-spanien.html?source=search",
+        "ports": "Barcelona -> Marseille",
+        "prices_per_person": {
+            "2_adults": 119,
+            "3_adults": 99,
+            "4_adults": 89
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:53"
+    },
+    {
+        "id": "82113",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Genua bis Barcelona",
+        "ship": "MSC Magnifica",
+        "duration_days": 3,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/82113_0/msc-magnifica-msc-cruises-msc-kreuzfahrten-barcelona-spanien-genua-italien.html?source=search",
+        "ports": "Genua -> Marseille -> Barcelona",
+        "prices_per_person": {
+            "2_adults": 173,
+            "3_adults": 143,
+            "4_adults": 128
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:53"
+    },
+    {
+        "id": "128995",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Marseille bis Valencia",
+        "ship": "MSC Orchestra",
+        "duration_days": 3,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/128995_0/msc-orchestra-msc-cruises-msc-kreuzfahrten-valencia-spanien-marseille-frankreich.html?source=search",
+        "ports": "Marseille -> Tarragona -> Valencia",
+        "prices_per_person": {
+            "2_adults": 203,
+            "3_adults": 180,
+            "4_adults": 168
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:53"
+    },
+    {
+        "id": "86447",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab/bis Savona",
+        "ship": "Costa Fascinosa",
+        "duration_days": 4,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/86447_0/costa-fascinosa-costa-kreuzfahrten-savona-italien.html?source=search",
+        "ports": "Savona -> Barcelona -> Marseille -> Savona",
+        "prices_per_person": {
+            "2_adults": 239,
+            "3_adults": 282,
+            "4_adults": 254
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:53"
+    },
+    {
+        "id": "129303",
+        "title": "Östliches Mittelmeer Kreuzfahrt ab Piräus / Athen bis Civitavecchia / Rom",
+        "ship": "MSC Sinfonia",
+        "duration_days": 4,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/oestliches-mittelmeer-kreuzfahrten/129303_0/msc-sinfonia-msc-cruises-msc-kreuzfahrten-civitavecchia-rom-italien-piraeus-athen-griechenland.html?source=search",
+        "ports": "Piräus / Athen -> Katákolon / Olympia -> Civitavecchia / Rom",
+        "prices_per_person": {
+            "2_adults": 245,
+            "3_adults": 262,
+            "4_adults": 235
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:53"
+    },
+    {
+        "id": "117449",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Neapel",
+        "ship": "MSC Euribia",
+        "duration_days": 4,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/?fuseaction=product.showroute&source=search&routeplanid=117449",
+        "ports": "Barcelona -> Marseille -> Genua -> Neapel",
+        "prices_per_person": {
+            "2_adults": 265,
+            "3_adults": 242,
+            "4_adults": 230
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:53"
+    },
+    {
+        "id": "125856",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Palermo bis Marseille",
+        "ship": "Costa Smeralda",
+        "duration_days": 4,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/125856_0/costa-smeralda-costa-kreuzfahrten-marseille-frankreich-palermo-sizilien-italien.html?source=search",
+        "ports": "Palermo -> Civitavecchia / Rom -> Savona -> Marseille",
+        "prices_per_person": {
+            "2_adults": 319,
+            "3_adults": 299,
+            "4_adults": 344
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:53"
+    },
+    {
+        "id": "81395",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab/bis Savona",
+        "ship": "Costa Fascinosa",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/81395_0/costa-fascinosa-costa-kreuzfahrten-savona-italien.html?source=search",
+        "ports": "Savona -> Barcelona -> Marseille -> Savona",
+        "prices_per_person": {
+            "2_adults": 319,
+            "3_adults": 266,
+            "4_adults": 304
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:53"
+    },
+    {
+        "id": "100985",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Cagliari",
+        "ship": "Costa Smeralda",
+        "duration_days": 3,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/100985_0/costa-smeralda-costa-kreuzfahrten-cagliari-sardinien-italien-barcelona-spanien.html?source=search",
+        "ports": "Barcelona -> Cagliari",
+        "prices_per_person": {
+            "2_adults": 329,
+            "3_adults": 272,
+            "4_adults": 244
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:53"
+    },
+    {
+        "id": "126838",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Valencia bis Civitavecchia / Rom",
+        "ship": "Costa Pacifica",
+        "duration_days": 4,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/126838_0/costa-pacifica-costa-kreuzfahrten-civitavecchia-rom-italien-valencia-spanien.html?source=search",
+        "ports": "Valencia -> Olbia -> Civitavecchia / Rom",
+        "prices_per_person": {
+            "2_adults": 329,
+            "4_adults": 349
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:53"
+    },
+    {
+        "id": "126654",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Neapel bis Savona",
+        "ship": "Costa Fascinosa",
+        "duration_days": 4,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/126654_0/costa-fascinosa-costa-kreuzfahrten-savona-italien-neapel-italien.html?source=search",
+        "ports": "Neapel -> Civitavecchia / Rom -> Ajaccio -> Savona",
+        "prices_per_person": {
+            "2_adults": 339,
+            "3_adults": 282,
+            "4_adults": 254
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:57"
+    },
+    {
+        "id": "131271",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Palermo",
+        "ship": "Costa Smeralda",
+        "duration_days": 4,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/131271_0/costa-smeralda-costa-kreuzfahrten-palermo-sizilien-italien-barcelona-spanien.html?source=search",
+        "ports": "Barcelona -> Ibiza -> Palermo",
+        "prices_per_person": {
+            "2_adults": 339,
+            "3_adults": 399,
+            "4_adults": 429
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:57"
+    },
+    {
+        "id": "127161",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab/bis Savona",
+        "ship": "Costa Diadema",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/127161_0/costa-diadema-costa-kreuzfahrten-savona-italien.html?source=search",
+        "ports": "Savona -> Palma -> Marseille -> Savona",
+        "prices_per_person": {
+            "2_adults": 339,
+            "3_adults": 432,
+            "4_adults": 404
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:57"
+    },
+    {
+        "id": "128994",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Genua bis Valencia",
+        "ship": "MSC Orchestra",
+        "duration_days": 4,
+        "cabin_type": "Außenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/128994_0/msc-orchestra-msc-cruises-msc-kreuzfahrten-valencia-spanien-genua-italien.html?source=search",
+        "ports": "Genua -> Marseille -> Tarragona -> Valencia",
+        "prices_per_person": {
+            "2_adults": 355,
+            "3_adults": 315,
+            "4_adults": 295
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:57"
+    },
+    {
+        "id": "128485",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Lissabon bis Tarragona",
+        "ship": "Norwegian Dawn",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/128485_0/norwegian-dawn-e-hoi-paket-norwegian-cruise-line-tarragona-spanien-lissabon-portugal.html?source=search",
+        "ports": "Lissabon -> Portimão -> Motril / Granada -> Cádiz -> Gibraltar -> Ibiza -> Palma -> Tarragona",
+        "prices_per_person": {
+            "2_adults": 375,
+            "3_adults": 480
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:57"
+    },
+    {
+        "id": "125429",
+        "title": "Östliches Mittelmeer Kreuzfahrt ab Civitavecchia / Rom bis Bari",
+        "ship": "MSC Orchestra",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/oestliches-mittelmeer-kreuzfahrten/125429_0/msc-orchestra-msc-cruises-msc-kreuzfahrten-bari-italien-civitavecchia-rom-italien.html?source=search",
+        "ports": "Civitavecchia / Rom -> Catania -> Kerkyra -> Kotor -> Bari",
+        "prices_per_person": {
+            "2_adults": 377,
+            "3_adults": 420,
+            "4_adults": 392
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:57"
+    },
+    {
+        "id": "86445",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab/bis Marseille",
+        "ship": "Costa Fascinosa",
+        "duration_days": 4,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/86445_0/costa-fascinosa-costa-kreuzfahrten-marseille-frankreich.html?source=search",
+        "ports": "Marseille -> Savona -> Barcelona -> Marseille",
+        "prices_per_person": {
+            "2_adults": 389,
+            "3_adults": 322,
+            "4_adults": 289
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:57"
+    },
+    {
+        "id": "118716",
+        "title": "Mittelmeer Kreuzfahrt ab Kusadasi / Ephesus bis Civitavecchia / Rom",
+        "ship": "MSC Divina",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/mittelmeer-kreuzfahrten/118716_0/msc-divina-msc-cruises-msc-kreuzfahrten-civitavecchia-rom-italien-kusadasi-ephesus-tuerkei.html?source=search",
+        "ports": "Kusadasi / Ephesus -> Marmaris -> Neapel -> Civitavecchia / Rom",
+        "prices_per_person": {
+            "2_adults": 397
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:57"
+    },
+    {
+        "id": "128804",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Palermo bis Savona",
+        "ship": "Costa Fascinosa",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/128804_0/costa-fascinosa-costa-kreuzfahrten-savona-italien-palermo-sizilien-italien.html?source=search",
+        "ports": "Palermo -> Neapel -> Civitavecchia / Rom -> Ajaccio -> Savona",
+        "prices_per_person": {
+            "2_adults": 399,
+            "3_adults": 332,
+            "4_adults": 299
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:57"
+    },
+    {
+        "id": "86443",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab/bis Barcelona",
+        "ship": "Costa Fascinosa",
+        "duration_days": 4,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/86443_0/costa-fascinosa-costa-kreuzfahrten-barcelona-spanien.html?source=search",
+        "ports": "Barcelona -> Marseille -> Savona -> Barcelona",
+        "prices_per_person": {
+            "2_adults": 419,
+            "3_adults": 344,
+            "4_adults": 319
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:44:57"
+    },
+    {
+        "id": "131215",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Civitavecchia / Rom bis Palma",
+        "ship": "Costa Pacifica",
+        "duration_days": 4,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/131215_0/costa-pacifica-costa-kreuzfahrten-palma-mallorca-balearische-inseln-civitavecchia-rom-italien.html?source=search",
+        "ports": "Civitavecchia / Rom -> Savona -> La Seyne -> sur -> Mer -> Palma",
+        "prices_per_person": {
+            "2_adults": 419,
+            "3_adults": 409
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:00"
+    },
+    {
+        "id": "128791",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Tarragona bis Barcelona",
+        "ship": "Norwegian Dawn",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/128791_0/norwegian-dawn-e-hoi-paket-norwegian-cruise-line-barcelona-spanien-tarragona-spanien.html?source=search",
+        "ports": "Tarragona -> Cádiz -> Motril / Granada -> Gibraltar -> Ibiza -> Palma -> Barcelona",
+        "prices_per_person": {
+            "2_adults": 421,
+            "3_adults": 347,
+            "4_adults": 311
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:00"
+    },
+    {
+        "id": "117450",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Palermo",
+        "ship": "MSC Euribia",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/?fuseaction=product.showroute&source=search&routeplanid=117450",
+        "ports": "Barcelona -> Marseille -> Genua -> Neapel -> Palermo",
+        "prices_per_person": {
+            "2_adults": 427
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:00"
+    },
+    {
+        "id": "128792",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Tarragona",
+        "ship": "Norwegian Dawn",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/128792_0/norwegian-dawn-e-hoi-paket-norwegian-cruise-line-tarragona-spanien-barcelona-spanien.html?source=search",
+        "ports": "Barcelona -> Palma -> Valencia -> Motril / Granada -> Gibraltar -> Cádiz -> Tarragona",
+        "prices_per_person": {
+            "2_adults": 434,
+            "3_adults": 346,
+            "4_adults": 302
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:00"
+    },
+    {
+        "id": "129066",
+        "title": "Östliches Mittelmeer Kreuzfahrt ab Bari bis Civitavecchia / Rom",
+        "ship": "MSC Sinfonia",
+        "duration_days": 6,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/oestliches-mittelmeer-kreuzfahrten/129066_0/msc-sinfonia-msc-cruises-msc-kreuzfahrten-civitavecchia-rom-italien-bari-italien.html?source=search",
+        "ports": "Bari -> Piräus / Athen -> Katákolon / Olympia -> Civitavecchia / Rom",
+        "prices_per_person": {
+            "2_adults": 445,
+            "3_adults": 402,
+            "4_adults": 381
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:00"
+    },
+    {
+        "id": "126943",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Marseille bis Palermo",
+        "ship": "Costa Smeralda",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/126943_0/costa-smeralda-costa-kreuzfahrten-palermo-sizilien-italien-marseille-frankreich.html?source=search",
+        "ports": "Marseille -> Barcelona -> Ibiza -> Palermo",
+        "prices_per_person": {
+            "2_adults": 449,
+            "3_adults": 459
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:00"
+    },
+    {
+        "id": "102801",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab/bis Civitavecchia / Rom",
+        "ship": "Queen Victoria",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/102801_0/queen-victoria-cunard-civitavecchia-rom-italien.html?source=search",
+        "ports": "Civitavecchia / Rom -> Marseille -> Villefranche -> sur -> Mer -> Genua -> La Spezia -> Civitavecchia / Rom",
+        "prices_per_person": {
+            "2_adults": 450,
+            "3_adults": 390
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:00"
+    },
+    {
+        "id": "102807",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Civitavecchia / Rom bis Barcelona",
+        "ship": "Queen Victoria",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/102807_0/queen-victoria-cunard-barcelona-spanien-civitavecchia-rom-italien.html?source=search",
+        "ports": "Civitavecchia / Rom -> Livorno / Florenz/Pisa -> La Seyne -> sur -> Mer -> Calvi -> Valencia -> Barcelona",
+        "prices_per_person": {
+            "2_adults": 450
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:00"
+    },
+    {
+        "id": "126281",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Neapel bis Marseille",
+        "ship": "Costa Fascinosa",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/126281_0/costa-fascinosa-costa-kreuzfahrten-marseille-frankreich-neapel-italien.html?source=search",
+        "ports": "Neapel -> Civitavecchia / Rom -> Ajaccio -> Savona -> Marseille",
+        "prices_per_person": {
+            "2_adults": 459,
+            "3_adults": 382,
+            "4_adults": 344
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:00"
+    },
+    {
+        "id": "126663",
+        "title": "Mittelmeer Kreuzfahrt ab Piräus / Athen bis Valencia",
+        "ship": "MSC Sinfonia",
+        "duration_days": 6,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/mittelmeer-kreuzfahrten/126663_0/msc-sinfonia-msc-cruises-msc-kreuzfahrten-valencia-spanien-piraeus-athen-griechenland.html?source=search",
+        "ports": "Piräus / Athen -> Katákolon / Olympia -> Civitavecchia / Rom -> Valencia",
+        "prices_per_person": {
+            "2_adults": 459,
+            "3_adults": 469,
+            "4_adults": 419
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:00"
+    },
+    {
+        "id": "81384",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab/bis Barcelona",
+        "ship": "Costa Fascinosa",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/81384_0/costa-fascinosa-costa-kreuzfahrten-barcelona-spanien.html?source=search",
+        "ports": "Barcelona -> Marseille -> Savona -> Barcelona",
+        "prices_per_person": {
+            "2_adults": 459,
+            "3_adults": 432,
+            "4_adults": 389
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:04"
+    },
+    {
+        "id": "126664",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Tarragona bis Civitavecchia / Rom",
+        "ship": "MSC Orchestra",
+        "duration_days": 5,
+        "cabin_type": "Außenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/126664_0/msc-orchestra-msc-cruises-msc-kreuzfahrten-civitavecchia-rom-italien-tarragona-spanien.html?source=search",
+        "ports": "Tarragona -> Valencia -> Livorno / Florenz/Pisa -> Civitavecchia / Rom",
+        "prices_per_person": {
+            "2_adults": 467,
+            "3_adults": 414,
+            "4_adults": 387
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:04"
+    },
+    {
+        "id": "118652",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Tarragona",
+        "ship": "MSC Magnifica",
+        "duration_days": 5,
+        "cabin_type": "Außenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/118652_0/msc-magnifica-msc-cruises-msc-kreuzfahrten-tarragona-spanien-barcelona-spanien.html?source=search",
+        "ports": "Barcelona -> Genua -> Marseille -> Tarragona",
+        "prices_per_person": {
+            "2_adults": 469,
+            "3_adults": 432,
+            "4_adults": 409
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:04"
+    },
+    {
+        "id": "68405",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Palma",
+        "ship": "Costa Diadema",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/68405_0/costa-diadema-costa-kreuzfahrten-palma-mallorca-balearische-inseln-barcelona-spanien.html?source=search",
+        "ports": "Barcelona -> Marseille -> Savona -> Palma",
+        "prices_per_person": {
+            "2_adults": 469,
+            "3_adults": 408,
+            "4_adults": 424
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:04"
+    },
+    {
+        "id": "107618",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Lissabon bis Barcelona",
+        "ship": "Norwegian Dawn",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/107618_0/norwegian-dawn-e-hoi-paket-norwegian-cruise-line-barcelona-spanien-lissabon-portugal.html?source=search",
+        "ports": "Lissabon -> Portimão -> Cádiz -> Motril / Granada -> Gibraltar -> Ibiza -> Palma -> Barcelona",
+        "prices_per_person": {
+            "2_adults": 483,
+            "4_adults": 451
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:04"
+    },
+    {
+        "id": "80950",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab/bis Genua",
+        "ship": "MSC Magnifica",
+        "duration_days": 5,
+        "cabin_type": "Außenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/80950_0/msc-magnifica-msc-cruises-msc-kreuzfahrten-genua-italien.html?source=search",
+        "ports": "Genua -> Marseille -> Barcelona -> Genua",
+        "prices_per_person": {
+            "2_adults": 489,
+            "3_adults": 456,
+            "4_adults": 419
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:04"
+    },
+    {
+        "id": "119340",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Civitavecchia / Rom bis Barcelona",
+        "ship": "Norwegian Epic",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/119340_0/norwegian-epic-e-hoi-paket-norwegian-cruise-line-barcelona-spanien-civitavecchia-rom-italien.html?source=search",
+        "ports": "Civitavecchia / Rom -> Salerno -> Catania -> Livorno / Florenz/Pisa -> Villefranche -> sur -> Mer -> Marseille -> Barcelona",
+        "prices_per_person": {
+            "2_adults": 503,
+            "3_adults": 443,
+            "4_adults": 378
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:04"
+    },
+    {
+        "id": "124905",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab La Goulette / Tunis bis Barcelona",
+        "ship": "MSC Meraviglia",
+        "duration_days": 6,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/?fuseaction=product.showroute&source=search&routeplanid=124905",
+        "ports": "La Goulette / Tunis -> Palermo -> Neapel -> Livorno / Florenz/Pisa -> Marseille -> Barcelona",
+        "prices_per_person": {
+            "2_adults": 519
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:04"
+    },
+    {
+        "id": "81392",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab/bis Marseille",
+        "ship": "Costa Fascinosa",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/81392_0/costa-fascinosa-costa-kreuzfahrten-marseille-frankreich.html?source=search",
+        "ports": "Marseille -> Savona -> Barcelona -> Marseille",
+        "prices_per_person": {
+            "2_adults": 529,
+            "3_adults": 439,
+            "4_adults": 394
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:04"
+    },
+    {
+        "id": "131216",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Palma bis Civitavecchia / Rom",
+        "ship": "Costa Pacifica",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/131216_0/costa-pacifica-costa-kreuzfahrten-civitavecchia-rom-italien-palma-mallorca-balearische-inseln.html?source=search",
+        "ports": "Palma -> Valencia -> Olbia -> Civitavecchia / Rom",
+        "prices_per_person": {
+            "2_adults": 529,
+            "3_adults": 466
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:04"
+    },
+    {
+        "id": "107617",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Lissabon",
+        "ship": "Norwegian Dawn",
+        "duration_days": 8,
+        "cabin_type": "Außenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/107617_0/norwegian-dawn-e-hoi-paket-norwegian-cruise-line-lissabon-portugal-barcelona-spanien.html?source=search&personen=3",
+        "ports": "Barcelona -> Palma -> Valencia -> Motril / Granada -> Gibraltar -> Cádiz -> Portimão -> Lissabon",
+        "prices_per_person": {
+            "3_adults": 431,
+            "4_adults": 367
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:19"
+    },
+    {
+        "id": "126953",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Palermo bis Barcelona",
+        "ship": "MSC Meraviglia",
+        "duration_days": 5,
+        "cabin_type": "Balkonkabine",
+        "url": "https://www.e-hoi.de/?fuseaction=product.showroute&source=search&routeplanid=126953&personen=3",
+        "ports": "Palermo -> Neapel -> Livorno / Florenz/Pisa -> Marseille -> Barcelona",
+        "prices_per_person": {
+            "3_adults": 447,
+            "4_adults": 397
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:23"
+    },
+    {
+        "id": "124483",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Civitavecchia / Rom",
+        "ship": "Norwegian Epic",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/124483_0/norwegian-epic-e-hoi-paket-norwegian-cruise-line-civitavecchia-rom-italien-barcelona-spanien.html?source=search&personen=3",
+        "ports": "Barcelona -> Villefranche -> sur -> Mer -> Marseille -> Livorno / Florenz/Pisa -> Messina -> Salerno -> Civitavecchia / Rom",
+        "prices_per_person": {
+            "3_adults": 464,
+            "4_adults": 395
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:23"
+    },
+    {
+        "id": "126443",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Lissabon bis Barcelona",
+        "ship": "Norwegian Dawn",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/126443_0/norwegian-dawn-e-hoi-paket-norwegian-cruise-line-barcelona-spanien-lissabon-portugal.html?source=search&personen=3",
+        "ports": "Lissabon -> Cádiz -> Motril / Granada -> Gibraltar -> Ibiza -> Palma -> Barcelona",
+        "prices_per_person": {
+            "3_adults": 467,
+            "4_adults": 400
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:23"
+    },
+    {
+        "id": "124482",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab Barcelona bis Civitavecchia / Rom",
+        "ship": "Norwegian Epic",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/124482_0/norwegian-epic-e-hoi-paket-norwegian-cruise-line-civitavecchia-rom-italien-barcelona-spanien.html?source=search&personen=3",
+        "ports": "Barcelona -> Marseille -> Cannes -> Livorno / Florenz/Pisa -> Messina -> Salerno -> Civitavecchia / Rom",
+        "prices_per_person": {
+            "3_adults": 468,
+            "4_adults": 389
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:23"
+    },
+    {
+        "id": "127159",
+        "title": "Westliches Mittelmeer Kreuzfahrt ab/bis Marseille",
+        "ship": "Costa Diadema",
+        "duration_days": 5,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/westliches-mittelmeer-kreuzfahrten/127159_0/costa-diadema-costa-kreuzfahrten-marseille-frankreich.html?source=search&personen=3",
+        "ports": "Marseille -> Savona -> Palma -> Marseille",
+        "prices_per_person": {
+            "3_adults": 499,
+            "4_adults": 449
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:23"
+    },
+    {
+        "id": "126283",
+        "title": "Östliches Mittelmeer Kreuzfahrt ab Piräus / Athen bis Ravenna",
+        "ship": "Norwegian Pearl",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/oestliches-mittelmeer-kreuzfahrten/126283_0/norwegian-pearl-e-hoi-paket-norwegian-cruise-line-ravenna-italien-piraeus-athen-griechenland.html?source=search&personen=4",
+        "ports": "Piräus / Athen -> Santorini -> Katákolon / Olympia -> Korfu -> Kotor -> Zadar -> Koper -> Ravenna",
+        "prices_per_person": {
+            "4_adults": 435
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:42"
+    },
+    {
+        "id": "107662",
+        "title": "Östliches Mittelmeer Kreuzfahrt ab Ravenna bis Civitavecchia / Rom",
+        "ship": "Norwegian Gem",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/oestliches-mittelmeer-kreuzfahrten/107662_0/norwegian-gem-e-hoi-paket-norwegian-cruise-line-civitavecchia-rom-italien-ravenna-italien.html?source=search&personen=4",
+        "ports": "Ravenna -> Split -> Dubrovnik -> Kotor -> Korfu -> Messina -> Salerno -> Civitavecchia / Rom",
+        "prices_per_person": {
+            "4_adults": 443
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:42"
+    },
+    {
+        "id": "126420",
+        "title": "Östliches Mittelmeer Kreuzfahrt ab Piräus / Athen bis Ravenna",
+        "ship": "Norwegian Pearl",
+        "duration_days": 8,
+        "cabin_type": "Innenkabine",
+        "url": "https://www.e-hoi.de/kreuzfahrt/oestliches-mittelmeer-kreuzfahrten/126420_0/norwegian-pearl-e-hoi-paket-norwegian-cruise-line-ravenna-italien-piraeus-athen-griechenland.html?source=search&personen=4",
+        "ports": "Piräus / Athen -> Mykonos -> Katákolon / Olympia -> Korfu -> Kotor -> Zadar -> Koper -> Ravenna",
+        "prices_per_person": {
+            "4_adults": 453
+        },
+        "exact_dates": [
+            "01.07.2026",
+            "31.10.2026"
+        ],
+        "updated_at": "2026-07-03 10:45:42"
+    }
+]
