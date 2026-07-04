@@ -2,26 +2,20 @@ import requests
 import json
 import re
 import time
-from datetime import datetime, timedelta
+from bs4 import BeautifulSoup
+from datetime import datetime
 
 def scrape_ehoi():
-    print("Starting e-hoi Session-Toggle Crawler...")
-    print("This architecture guarantees flat-list outputs and true tiered pricing.")
+    print("Starting e-hoi Flat-List Scraper...")
+    print("Extracting exact dates and base prices directly from the calendar.")
     
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "Accept-Language": "de-DE,de;q=0.9"
+        "Accept-Language": "de-DE,de;q=0.9",
+        "X-Requested-With": "XMLHttpRequest"
     }
 
-    cruise_db = {}
-    max_pages = 200 
-    passenger_counts = [2, 3, 4]
-    
-    for p_count in passenger_counts:
-        print(f"\n--- GATHERING CALENDAR DATA FOR {p_count} ADULTS ---")
-        
-        # Create a fresh session for each passenger count to avoid cookie cross-contamination
-        session = requests.Session()
+    session = requests.Session()
     session.headers.update(headers)
 
     final_list = []
@@ -34,10 +28,7 @@ def scrape_ehoi():
         ajax_url = f"https://www.e-hoi.de/?fuseaction=mod_kreuzfahrtkalender.showkreuzfahrtkalender&referenceID=64&referenceType=destination&sort=departDate_asc&page={page_num}&departdate=08.07.2026&arrivdate=31.10.2026&reisedauer=1-5&reisedauer=6-9"
         
         try:
-            ajax_headers = headers.copy()
-            ajax_headers["X-Requested-With"] = "XMLHttpRequest"
-            
-            response = session.get(ajax_url, headers=ajax_headers, timeout=30)
+            response = session.get(ajax_url, timeout=30)
             response.encoding = 'utf-8'
             
             if not response.text.strip():
@@ -46,70 +37,73 @@ def scrape_ehoi():
 
             soup = BeautifulSoup(response.text, 'html.parser')
             table = soup.find('table', class_='table')
+            
             if not table:
                 print("No table found. Ending scrape.")
                 break
                 
             tbody = table.find('tbody')
-                if not tbody:
-                    break
-                    
-                rows = tbody.find_all('tr')
-                if not rows:
-                    break
-                    
-                valid_rows = 0
+            if not tbody:
+                break
                 
-                for row in rows:
-                    cols = row.find_all('td')
-                    if len(cols) < 6:
-                        continue
-                        
-                    # 1. Extract Exact Date
-                    date_text = cols[0].get_text(separator=' ', strip=True)
-                    date_match = re.search(r'(\d{2}\.\d{2}\.\d{4})', date_text)
-                    if not date_match:
-                        continue
-                    start_date = date_match.group(1)
+            rows = tbody.find_all('tr')
+            if not rows:
+                break
+                
+            valid_rows = 0
+            
+            for row in rows:
+                cols = row.find_all('td')
+                if len(cols) < 6:
+                    continue
                     
-                    # 2. Extract Link & Route ID
-                    link_elem = cols[5].find('a', href=True)
-                    if not link_elem:
-                        continue
-                    url = link_elem['href']
-                    if url.startswith('/'):
-                        url = "https://www.e-hoi.de" + url
-                        
-                    id_match = re.search(r'/(\d+)_\d+/', url)
+                # 1. Extract Exact Date
+                date_text = cols[0].get_text(separator=' ', strip=True)
+                date_match = re.search(r'(\d{2}\.\d{2}\.\d{4})', date_text)
+                if not date_match:
+                    continue
+                start_date = date_match.group(1)
+                
+                # 2. Extract Link & Route ID
+                link_elem = cols[5].find('a', href=True)
+                if not link_elem:
+                    continue
+                url = link_elem['href']
+                if url.startswith('/'):
+                    url = "https://www.e-hoi.de" + url
+                    
+                id_match = re.search(r'/(\d+)_\d+/', url)
+                if not id_match:
+                    id_match = re.search(r'routeplanid=(\d+)', url)
                     if not id_match:
-                        id_match = re.search(r'routeplanid=(\d+)', url)
-                        if not id_match:
-                            continue
-                    route_id = id_match.group(1)
-                    
-                    # 3. Extract Price (Now mathematically tied to our session passenger count!)
-                    price_em = cols[5].find('em')
-                    price_text = price_em.text if price_em else cols[5].get_text()
-                    price_val_match = re.search(r'(\d+[\.,]?\d*)', price_text.replace('.', ''))
-                    if not price_val_match:
                         continue
-                    price_val = int(price_val_match.group(1))
+                route_id = id_match.group(1)
+                
+                # 3. Extract Price
+                price_em = cols[5].find('em')
+                price_text = price_em.text if price_em else cols[5].get_text()
+                price_val_match = re.search(r'(\d+[\.,]?\d*)', price_text.replace('.', ''))
+                if not price_val_match:
+                    continue
+                price_val = int(price_val_match.group(1))
 
-                    # 4. Clean up Ship & Route Names
-                    ship_text = cols[1].get_text(separator=' ', strip=True).replace("Schiff:", "").strip()
-                    ship_name = re.split(r'\(', ship_text)[0].strip() if ship_text else "Unbekannt"
-                    
-                    dur_text = cols[2].get_text(strip=True)
-                    dur_match = re.search(r'(\d+)', dur_text)
-                    duration = int(dur_match.group(1)) if dur_match else 0
-                    
-                    ports_text = cols[3].get_text(separator=' ', strip=True).replace('\n', ' ').replace("Route:", "").strip()
-                    ports_text = re.sub(r'\s+', ' ', ports_text)
+                # 4. Clean up Ship
+                ship_text = cols[1].get_text(separator=' ', strip=True).replace("Schiff:", "").strip()
+                ship_name = re.split(r'\(', ship_text)[0].strip() if ship_text else "Unbekannt"
+                
+                # 5. Extract Duration
+                dur_text = cols[2].get_text(strip=True)
+                dur_match = re.search(r'(\d+)', dur_text)
+                duration = int(dur_match.group(1)) if dur_match else 0
+                
+                # 6. Extract Ports
+                ports_text = cols[3].get_text(separator=' ', strip=True).replace('\n', ' ').replace("Route:", "").strip()
+                ports_text = re.sub(r'\s+', ' ', ports_text)
                 first_port = ports_text.split('-')[0].strip() if '-' in ports_text else ports_text
                 
                 # Build Flat Block (One distinct date per block)
                 trip = {
-                    "id": route_id,
+                    "id": f"{route_id}_{start_date}",
                     "date": start_date,
                     "title": f"Mittelmeer Kreuzfahrt ab {first_port}",
                     "ship": ship_name,
@@ -127,6 +121,11 @@ def scrape_ehoi():
                 valid_rows += 1
                 
             print(f"-> Extracted {valid_rows} unique departure dates from page {page_num}.")
+            
+            # Stop if no valid rows were found on this page
+            if valid_rows == 0:
+                break
+                
             time.sleep(1) # Fast, polite delay
             
         except Exception as e:
