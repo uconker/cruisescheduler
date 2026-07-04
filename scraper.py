@@ -22,37 +22,35 @@ def scrape_ehoi():
         
         # Create a fresh session for each passenger count to avoid cookie cross-contamination
         session = requests.Session()
-        session.headers.update(headers)
+    session.headers.update(headers)
+
+    final_list = []
+    max_pages = 200 
+    
+    print(f"\n--- GATHERING EXACT DATES & PRICES (Up to {max_pages} Pages) ---")
+    
+    for page_num in range(1, max_pages + 1):
+        # Explicit parameters in the URL guarantee it never returns empty!
+        ajax_url = f"https://www.e-hoi.de/?fuseaction=mod_kreuzfahrtkalender.showkreuzfahrtkalender&referenceID=64&referenceType=destination&sort=departDate_asc&page={page_num}&departdate=08.07.2026&arrivdate=31.10.2026&reisedauer=1-5&reisedauer=6-9"
         
-        # Step 1: Prime the session with our specific passenger count!
-        setup_url = f"https://www.e-hoi.de/mittelmeer-kreuzfahrten/fahrgebiet-64.html?usersearch=1&departdate=08.07.2026&arrivdate=31.10.2026&daterange=08.07.2026%20-%2031.10.2026&reisedauer=1-5&reisedauer=6-9&personen={p_count}"
         try:
-            print("Configuring search session parameters on e-hoi servers...")
-            session.get(setup_url, timeout=30)
-        except Exception as e:
-            print(f"Session setup failed: {e}")
-        time.sleep(1)
-
-        # Step 2: Loop the calendar pages
-        for page_num in range(1, max_pages + 1):
-            ajax_url = f"https://www.e-hoi.de/?fuseaction=mod_kreuzfahrtkalender.showkreuzfahrtkalender&referenceID=64&referenceType=destination&sort=departDate_asc&page={page_num}"
+            ajax_headers = headers.copy()
+            ajax_headers["X-Requested-With"] = "XMLHttpRequest"
             
-            try:
-                ajax_headers = headers.copy()
-                ajax_headers["X-Requested-With"] = "XMLHttpRequest"
-                
-                response = session.get(ajax_url, headers=ajax_headers, timeout=30)
-                response.encoding = 'utf-8'
-                
-                if not response.text.strip():
-                    break
+            response = session.get(ajax_url, headers=ajax_headers, timeout=30)
+            response.encoding = 'utf-8'
+            
+            if not response.text.strip():
+                print(f"Empty response on page {page_num}. Ending scrape.")
+                break
 
-                soup = BeautifulSoup(response.text, 'html.parser')
-                table = soup.find('table', class_='table')
-                if not table:
-                    break
-                    
-                tbody = table.find('tbody')
+            soup = BeautifulSoup(response.text, 'html.parser')
+            table = soup.find('table', class_='table')
+            if not table:
+                print("No table found. Ending scrape.")
+                break
+                
+            tbody = table.find('tbody')
                 if not tbody:
                     break
                     
@@ -107,46 +105,43 @@ def scrape_ehoi():
                     
                     ports_text = cols[3].get_text(separator=' ', strip=True).replace('\n', ' ').replace("Route:", "").strip()
                     ports_text = re.sub(r'\s+', ' ', ports_text)
-                    
-                    # THE FLAT LIST KEY: Every exact date creates an entirely unique block of data
-                    trip_key = f"{route_id}_{start_date}"
-                    
-                    if trip_key not in cruise_db:
-                        first_port = ports_text.split('-')[0].strip() if '-' in ports_text else ports_text
-                        cruise_db[trip_key] = {
-                            "id": route_id,
-                            "date": start_date, # Only a single string, NOT an array of dates!
-                            "title": f"Mittelmeer Kreuzfahrt ab {first_port}",
-                            "ship": ship_name,
-                            "duration_days": duration,
-                            "cabin_type": "Günstigste verfügbare Kabine",
-                            "url": url,
-                            "ports": ports_text,
-                            "prices_per_person": {},
-                            "updated_at": time.strftime("%Y-%m-%d %H:%M:%S")
-                        }
-                    
-                    # Store the dynamically pulled price
-                    cruise_db[trip_key]["prices_per_person"][f"{p_count}_adults"] = price_val
-                    valid_rows += 1
-                    
-                if valid_rows == 0:
-                    break
-                    
-                time.sleep(0.3) 
+                first_port = ports_text.split('-')[0].strip() if '-' in ports_text else ports_text
                 
-            except Exception as e:
-                print(f"Error on page {page_num}: {e}")
-                break
+                # Build Flat Block (One distinct date per block)
+                trip = {
+                    "id": route_id,
+                    "date": start_date,
+                    "title": f"Mittelmeer Kreuzfahrt ab {first_port}",
+                    "ship": ship_name,
+                    "duration_days": duration,
+                    "cabin_type": "Günstigste verfügbare Kabine",
+                    "url": url,
+                    "ports": ports_text,
+                    "prices_per_person": {
+                        "2_adults": price_val
+                    },
+                    "updated_at": time.strftime("%Y-%m-%d %H:%M:%S")
+                }
+                
+                final_list.append(trip)
+                valid_rows += 1
+                
+            print(f"-> Extracted {valid_rows} unique departure dates from page {page_num}.")
+            time.sleep(1) # Fast, polite delay
+            
+        except Exception as e:
+            print(f"Error on page {page_num}: {e}")
+            break
 
     print("\n--- FINALIZING DATA ---")
-    final_list = list(cruise_db.values())
+    
+    # Sort chronologically
     final_list.sort(key=lambda x: datetime.strptime(x["date"], "%d.%m.%Y") if x.get("date") else datetime.min)
     
     with open('cruises.json', 'w', encoding='utf-8') as f:
         json.dump(final_list, f, indent=4, ensure_ascii=False)
         
-    print(f"Mission Accomplished! Exported {len(final_list)} fully independent trip dates with accurate tiered pricing.")
+    print(f"Mission Accomplished! Saved {len(final_list)} flat-list trips.")
 
 if __name__ == "__main__":
     scrape_ehoi()
