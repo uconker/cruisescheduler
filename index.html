@@ -30,11 +30,11 @@
         .calendar-wrapper { flex-grow: 1; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 20px; overflow-x: auto; }
         .calendar-scroll { position: relative; }
         
-        .months-row { display: flex; border-bottom: 2px solid #ccc; margin-bottom: 5px; }
-        .month-header { font-weight: bold; text-align: center; color: #057a93; padding: 5px 0; border-right: 1px solid #eee; box-sizing: border-box; }
+        .months-row { display: flex; border-bottom: 2px solid #ccc; margin-bottom: 5px; width: max-content; }
+        .month-header { font-weight: bold; text-align: center; color: #057a93; padding: 5px 0; border-right: 1px solid #eee; box-sizing: border-box; flex-shrink: 0; }
         
         /* Strict pixel widths for perfect alignment */
-        .days-row { display: flex; position: relative; }
+        .days-row { display: flex; position: relative; width: max-content; }
         .day-cell { width: 50px; flex-shrink: 0; box-sizing: border-box; text-align: center; padding: 5px 0; border-right: 1px solid #eee; cursor: pointer; user-select: none; transition: background 0.2s; min-height: 500px; display: flex; flex-direction: column; }
         .day-cell:hover::after { content: ''; position: absolute; top: 0; width: 49px; bottom: 0; background: rgba(5,122,147,0.1); pointer-events: none; }
         .day-cell .day-num { font-weight: bold; font-size: 0.9rem; margin-bottom: 3px; }
