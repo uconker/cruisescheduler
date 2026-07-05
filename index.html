@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kreuzfahrt Gruppen-Kalender</title>
+    <title>Cruise Group Calendar</title>
     <style>
         body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
         .header { display: flex; justify-content: space-between; align-items: center; background-color: #fff; padding: 15px 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
@@ -28,16 +28,17 @@
         
         /* Calendar */
         .calendar-wrapper { flex-grow: 1; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 20px; overflow-x: auto; }
-        .calendar-scroll { min-width: 800px; position: relative; }
+        .calendar-scroll { position: relative; }
         
         .months-row { display: flex; border-bottom: 2px solid #ccc; margin-bottom: 5px; }
-        .month-header { font-weight: bold; text-align: center; color: #057a93; padding: 5px 0; border-right: 1px solid #eee; }
+        .month-header { font-weight: bold; text-align: center; color: #057a93; padding: 5px 0; border-right: 1px solid #eee; box-sizing: border-box; }
         
+        /* Strict pixel widths for perfect alignment */
         .days-row { display: flex; position: relative; }
-        .day-cell { flex: 1; text-align: center; font-size: 0.8rem; padding: 5px 0; border-right: 1px solid #eee; cursor: pointer; user-select: none; transition: background 0.2s; position: relative; min-height: 500px; display: flex; flex-direction: column; }
-        .day-cell:hover::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5,122,147,0.1); pointer-events: none; }
-        .day-cell .day-num { font-weight: bold; margin-bottom: 3px; }
-        .day-cell .day-name { font-size: 0.7rem; color: #888; }
+        .day-cell { width: 50px; flex-shrink: 0; box-sizing: border-box; text-align: center; padding: 5px 0; border-right: 1px solid #eee; cursor: pointer; user-select: none; transition: background 0.2s; min-height: 500px; display: flex; flex-direction: column; }
+        .day-cell:hover::after { content: ''; position: absolute; top: 0; width: 49px; bottom: 0; background: rgba(5,122,147,0.1); pointer-events: none; }
+        .day-cell .day-num { font-weight: bold; font-size: 0.9rem; margin-bottom: 3px; }
+        .day-cell .day-name { font-size: 0.75rem; color: #888; }
         .day-cell.weekend { background-color: #f9f9f9; }
         
         /* Availability Heatmap Colors */
@@ -48,18 +49,19 @@
         .heat-full { background-color: #4caf50; color: white; }
         
         /* Cruise Ribbons */
-        .ribbons-container { position: absolute; top: 50px; left: 0; right: 0; bottom: 0; pointer-events: none; }
+        .ribbons-container { position: absolute; top: 60px; left: 0; right: 0; bottom: 0; pointer-events: none; }
         .cruise-span { 
             position: absolute; 
-            height: 24px; 
-            border-radius: 12px; 
-            background: rgba(5,122,147,0.85); 
+            height: 28px; /* Taller ribbons */
+            border-radius: 4px; 
+            background: rgba(5,122,147,0.9); 
             color: #fff; 
-            font-size: 0.75rem; 
+            font-size: 0.85rem; 
             display: flex; 
             align-items: center; 
-            padding: 0 10px; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+            padding: 0 8px; 
+            box-sizing: border-box;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2); 
             pointer-events: auto; 
             transition: all 0.2s ease; 
             white-space: nowrap; 
@@ -76,22 +78,26 @@
         }
         .cruise-span.dimmed { opacity: 0.2; }
         .cruise-span.highlighted { background: #e65100; z-index: 20; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+
+        /* Loader */
+        #loader { font-weight: bold; color: #e65100; margin-left: 15px; display: none; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>🛳️ Kreuzfahrt Gruppen-Kalender (Juli - Okt 2026)</h1>
+        <h1>🛳️ Cruise Group Calendar (Jul - Oct 2026)</h1>
         <div class="controls">
+            <span id="loader">Syncing DB...</span>
             <div class="control-group">
-                <label>Maximalpreis (€)</label>
-                <input type="number" id="maxPrice" value="700" step="50" style="width: 80px;" onchange="loadData()">
+                <label>Max Price (€)</label>
+                <input type="number" id="maxPrice" value="700" step="50" style="width: 80px;" onchange="renderCalendar()">
             </div>
             <div class="control-group">
-                <label>Wer trägt ein?</label>
+                <label>Select User</label>
                 <div style="display: flex; gap: 5px;">
                     <select id="userSelect" onchange="changeUser()"></select>
-                    <button class="btn-add" onclick="addUser()">+ Neu</button>
+                    <button class="btn-add" onclick="addUser()">+ New</button>
                 </div>
             </div>
         </div>
@@ -99,7 +105,7 @@
 
     <div class="main-container">
         <div class="sidebar">
-            <h2>Gefilterte Reisen (<span id="cruiseCount">0</span>)</h2>
+            <h2>Filtered Cruises (<span id="cruiseCount">0</span>)</h2>
             <div id="cruiseList"></div>
         </div>
 
@@ -114,22 +120,79 @@
     </div>
 
     <script>
-        // --- CALENDAR SETUP ---
+        // ==========================================
+        // DATABASE CONFIGURATION (JSONBin.io)
+        // ==========================================
+        const BIN_ID = "YOUR_BIN_ID_HERE";       // e.g., 65f2a1b3c...
+        const API_KEY = "YOUR_API_KEY_HERE";     // e.g., $2a$10$xyz...
+
+        // ==========================================
+
         const startDate = new Date(2026, 6, 1); // July 1, 2026
         const endDate = new Date(2026, 9, 31);  // October 31, 2026
         const totalDays = Math.round((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+        const CELL_WIDTH = 50; // Strict pixel width for perfect alignment
         
         let cruisesData = [];
-        
-        // --- USER & LOCALSTORAGE SETUP ---
-        let users = JSON.parse(localStorage.getItem('cruise_users')) || ['User 1', 'User 2'];
-        let currentUser = users[0];
-        let availability = JSON.parse(localStorage.getItem('cruise_availability')) || {};
+        let dbData = { users: ['User 1'], availability: {} };
+        let currentUser = 'User 1';
+
+        // --- DATABASE SYNC LOGIC ---
+        async function fetchDatabase() {
+            if (BIN_ID === "YOUR_BIN_ID_HERE") {
+                console.warn("No Bin ID provided. Falling back to temporary local storage.");
+                dbData = JSON.parse(localStorage.getItem('fallback_db')) || dbData;
+                initUsers();
+                return;
+            }
+
+            document.getElementById('loader').style.display = 'inline';
+            try {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                const result = await response.json();
+                if (result.record) dbData = result.record;
+            } catch (err) {
+                console.error("Failed to fetch from DB:", err);
+            }
+            document.getElementById('loader').style.display = 'none';
+            initUsers();
+            renderCalendar();
+        }
+
+        async function saveDatabase() {
+            if (BIN_ID === "YOUR_BIN_ID_HERE") {
+                localStorage.setItem('fallback_db', JSON.stringify(dbData));
+                renderCalendar();
+                return;
+            }
+
+            document.getElementById('loader').style.display = 'inline';
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(dbData)
+                });
+            } catch (err) {
+                console.error("Failed to save to DB:", err);
+            }
+            document.getElementById('loader').style.display = 'none';
+            renderCalendar();
+        }
 
         function initUsers() {
             const select = document.getElementById('userSelect');
             select.innerHTML = '';
-            users.forEach(u => {
+            
+            if (!dbData.users) dbData.users = ['User 1'];
+            if (!dbData.users.includes(currentUser)) currentUser = dbData.users[0];
+
+            dbData.users.forEach(u => {
                 const opt = document.createElement('option');
                 opt.value = u;
                 opt.textContent = u;
@@ -143,37 +206,36 @@
         }
 
         function addUser() {
-            const name = prompt("Name der neuen Person:");
-            if(name && !users.includes(name)) {
-                users.push(name);
-                localStorage.setItem('cruise_users', JSON.stringify(users));
+            const name = prompt("Enter name for new user:");
+            if(name && !dbData.users.includes(name)) {
+                dbData.users.push(name);
                 currentUser = name;
+                saveDatabase(); // Sync to cloud
                 initUsers();
-                renderCalendar();
             }
         }
 
         function toggleDay(dateStr) {
-            if(!availability[currentUser]) availability[currentUser] = {};
-            availability[currentUser][dateStr] = !availability[currentUser][dateStr];
+            if(!dbData.availability[currentUser]) dbData.availability[currentUser] = {};
+            dbData.availability[currentUser][dateStr] = !dbData.availability[currentUser][dateStr];
             
-            localStorage.setItem('cruise_availability', JSON.stringify(availability));
-            renderCalendar();
+            saveDatabase(); // Sync to cloud
         }
 
         function getHeatClass(dateStr) {
             let count = 0;
-            users.forEach(u => {
-                if(availability[u] && availability[u][dateStr]) count++;
+            dbData.users.forEach(u => {
+                if(dbData.availability[u] && dbData.availability[u][dateStr]) count++;
             });
             if(count === 0) return '';
-            if(count === users.length) return 'heat-full';
+            if(count === dbData.users.length) return 'heat-full';
             if(count === 1) return 'heat-1';
             if(count === 2) return 'heat-2';
             if(count === 3) return 'heat-3';
             return 'heat-4';
         }
 
+        // --- CALENDAR RENDERING ---
         function buildCalendarGrid() {
             const monthsRow = document.getElementById('monthsRow');
             const daysRow = document.getElementById('daysRow');
@@ -193,12 +255,12 @@
                 const dateStr = d.toISOString().split('T')[0];
                 
                 if(d.getMonth() !== currentMonth) {
-                    if(monthEl) monthEl.style.flex = monthDays;
+                    if(monthEl) monthEl.style.width = `${monthDays * CELL_WIDTH}px`;
                     currentMonth = d.getMonth();
                     monthDays = 0;
                     monthEl = document.createElement('div');
                     monthEl.className = 'month-header';
-                    monthEl.textContent = d.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                    monthEl.textContent = d.toLocaleString('en-US', { month: 'long', year: 'numeric' });
                     monthsRow.appendChild(monthEl);
                 }
                 monthDays++;
@@ -213,22 +275,21 @@
                 
                 const nameEl = document.createElement('div');
                 nameEl.className = 'day-name';
-                nameEl.textContent = d.toLocaleString('de-DE', { weekday: 'short' });
+                nameEl.textContent = d.toLocaleString('en-US', { weekday: 'short' });
 
                 dayEl.appendChild(numEl);
                 dayEl.appendChild(nameEl);
                 daysRow.appendChild(dayEl);
             }
-            if(monthEl) monthEl.style.flex = monthDays;
+            if(monthEl) monthEl.style.width = `${monthDays * CELL_WIDTH}px`;
         }
 
-        // --- CRUISE RENDERING LOGIC ---
         function parseGermanDate(dateStr) {
             const parts = dateStr.split('.');
             return new Date(parts[2], parts[1] - 1, parts[0]);
         }
 
-        function loadData() {
+        function loadCruises() {
             fetch('cruises.json')
                 .then(response => response.json())
                 .then(data => {
@@ -237,7 +298,7 @@
                 })
                 .catch(err => {
                     console.error("Error loading cruises.json:", err);
-                    document.getElementById('cruiseList').innerHTML = '<p style="color:red;">Konnte cruises.json nicht laden. Bitte stellen Sie sicher, dass die Datei im selben Ordner existiert.</p>';
+                    document.getElementById('cruiseList').innerHTML = '<p style="color:red;">Could not load cruises.json. Ensure the file is in the same directory.</p>';
                 });
         }
 
@@ -269,21 +330,22 @@
 
                 if(cruiseEnd < startDate || cruiseStart > endDate) return;
 
+                // 1. Build Left Sidebar Card
                 const card = document.createElement('div');
                 card.className = 'cruise-card';
                 card.id = `card-${index}`;
                 card.innerHTML = `
-                    <h3>${cruise.ship} (${cruise.duration_days} Tage)</h3>
+                    <h3>${cruise.ship} (${cruise.duration_days} Days)</h3>
                     <p><strong>Start:</strong> ${cruise.date}</p>
-                    <p><strong>Route:</strong> ${cruise.ports}</p>
-                    <div class="cruise-price">${cruise.prices_per_person['2_adults']} € p.P.</div>
+                    <p><strong>Itinerary:</strong> ${cruise.ports}</p>
+                    <div class="cruise-price">${cruise.prices_per_person['2_adults']} € pp</div>
                 `;
-                
                 card.onmouseenter = () => highlightRibbon(index, true);
                 card.onmouseleave = () => highlightRibbon(index, false);
                 card.onclick = () => window.open(cruise.url, '_blank');
                 listEl.appendChild(card);
 
+                // 2. Math for exact pixel alignment on grid
                 let startOffsetDays = Math.round((cruiseStart - startDate) / (1000 * 60 * 60 * 24));
                 let drawDuration = cruise.duration_days;
                 
@@ -295,9 +357,7 @@
                     drawDuration = totalDays - startOffsetDays;
                 }
 
-                const leftPercent = (startOffsetDays / totalDays) * 100;
-                const widthPercent = (drawDuration / totalDays) * 100;
-
+                // 3. Track collision logic (prevents overlapping ribbons)
                 let trackIndex = 0;
                 while(true) {
                     if(!tracks[trackIndex]) {
@@ -311,16 +371,19 @@
                     trackIndex++;
                 }
 
+                // 4. Draw Ribbon
                 const ribbon = document.createElement('div');
                 ribbon.className = 'cruise-span';
                 ribbon.id = `ribbon-${index}`;
-                ribbon.style.left = `${leftPercent}%`;
-                ribbon.style.width = `${widthPercent}%`;
-                ribbon.style.top = `${trackIndex * 28}px`; 
                 
-                // Embed Route directly into the ribbon UI
-                ribbon.innerHTML = `<strong>${cruise.ship}</strong>: ${cruise.ports} (${cruise.prices_per_person['2_adults']}€)`;
-                ribbon.title = `${cruise.title}\nSchiff: ${cruise.ship}\nRoute: ${cruise.ports}\nPreis: ${cruise.prices_per_person['2_adults']}€`;
+                // Exactly matched to CELL_WIDTH (50px)
+                ribbon.style.left = `${startOffsetDays * CELL_WIDTH}px`;
+                ribbon.style.width = `${drawDuration * CELL_WIDTH}px`;
+                ribbon.style.top = `${trackIndex * 32}px`; // 32px vertical spacing per track
+                
+                // Embedded Text
+                ribbon.innerHTML = `<strong>${cruise.ship}</strong>: ${cruise.ports}`;
+                ribbon.title = `${cruise.title}\nShip: ${cruise.ship}\nItinerary: ${cruise.ports}\nPrice: ${cruise.prices_per_person['2_adults']}€`;
                 
                 ribbon.onclick = () => window.open(cruise.url, '_blank');
                 ribbon.onmouseenter = () => highlightRibbon(index, true);
@@ -329,7 +392,7 @@
                 ribbonsEl.appendChild(ribbon);
             });
             
-            const requiredHeight = (tracks.length * 28) + 50; 
+            const requiredHeight = (tracks.length * 32) + 80; 
             document.querySelectorAll('.day-cell').forEach(el => {
                 el.style.minHeight = `${Math.max(500, requiredHeight)}px`;
             });
@@ -346,17 +409,15 @@
                 }
             });
             
-            if(isHovering) {
-                const card = document.getElementById(`card-${index}`);
-                if(card) card.style.borderColor = '#e65100';
-            } else {
-                const card = document.getElementById(`card-${index}`);
-                if(card) card.style.borderColor = '#eee';
+            const card = document.getElementById(`card-${index}`);
+            if(card) {
+                card.style.borderColor = isHovering ? '#e65100' : '#eee';
             }
         }
 
-        initUsers();
-        loadData();
+        // Init process
+        fetchDatabase(); // Pull users and availability from cloud
+        loadCruises();   // Pull cruises from local json
 
     </script>
 </body>
