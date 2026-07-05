@@ -1,557 +1,363 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group Cruise Planner</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Kreuzfahrt Gruppen-Kalender</title>
     <style>
-        /* Custom scrollbar for aesthetic */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        .header { display: flex; justify-content: space-between; align-items: center; background-color: #fff; padding: 15px 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .header h1 { margin: 0; font-size: 1.5rem; color: #057a93; }
+        .controls { display: flex; gap: 20px; align-items: center; }
+        .control-group { display: flex; flex-direction: column; }
+        .control-group label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: #666; margin-bottom: 5px; }
+        .control-group select, .control-group input { padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+        .btn-add { background: #057a93; color: #fff; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-add:hover { background: #045c6f; }
         
-        /* Smooth transitions for the ribbons and interactive elements */
-        .cruise-ribbon { transition: opacity 0.2s ease, filter 0.2s ease; cursor: pointer; }
-        .cruise-ribbon:hover { filter: brightness(0.85); z-index: 30; }
+        .main-container { display: flex; gap: 20px; align-items: flex-start; }
         
-        /* When a specific cruise is highlighted, dim the others */
-        .dimmed { opacity: 0.2; }
+        /* Sidebar */
+        .sidebar { width: 320px; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 15px; max-height: 80vh; overflow-y: auto; flex-shrink: 0; }
+        .sidebar h2 { margin-top: 0; font-size: 1.2rem; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .cruise-card { border: 1px solid #eee; border-radius: 6px; padding: 10px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease; }
+        .cruise-card:hover { border-color: #057a93; box-shadow: 0 4px 8px rgba(5,122,147,0.1); }
+        .cruise-card h3 { margin: 0 0 5px 0; font-size: 1rem; color: #057a93; }
+        .cruise-card p { margin: 2px 0; font-size: 0.85rem; color: #555; }
+        .cruise-price { font-weight: bold; font-size: 1.1rem; color: #e65100; margin-top: 5px; }
         
-        .no-select { -webkit-user-select: none; user-select: none; }
+        /* Calendar */
+        .calendar-wrapper { flex-grow: 1; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 20px; overflow-x: auto; }
+        .calendar-scroll { min-width: 800px; position: relative; }
         
-        /* Calendar Grid specific styling */
-        .cal-grid {
-            display: grid;
-            grid-template-columns: repeat(7, minmax(0, 1fr));
-            gap: 1px;
-            background-color: #e2e8f0; /* Borders color */
-            border: 1px solid #e2e8f0;
-        }
-        .cal-cell {
-            background-color: white;
-            min-height: 100px; /* Minimum height for a day */
-            display: flex;
-            flex-direction: column;
-            transition: background-color 0.2s ease;
-        }
-        .cal-cell-header {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 4px;
-            text-align: right;
-            color: #64748b;
+        .months-row { display: flex; border-bottom: 2px solid #ccc; margin-bottom: 5px; }
+        .month-header { font-weight: bold; text-align: center; color: #057a93; padding: 5px 0; border-right: 1px solid #eee; }
+        
+        .days-row { display: flex; position: relative; }
+        .day-cell { flex: 1; text-align: center; font-size: 0.8rem; padding: 5px 0; border-right: 1px solid #eee; cursor: pointer; user-select: none; transition: background 0.2s; position: relative; min-height: 500px; display: flex; flex-direction: column; }
+        .day-cell:hover::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5,122,147,0.1); pointer-events: none; }
+        .day-cell .day-num { font-weight: bold; margin-bottom: 3px; }
+        .day-cell .day-name { font-size: 0.7rem; color: #888; }
+        .day-cell.weekend { background-color: #f9f9f9; }
+        
+        /* Availability Heatmap Colors */
+        .heat-1 { background-color: #e8f5e9; }
+        .heat-2 { background-color: #c8e6c9; }
+        .heat-3 { background-color: #a5d6a7; }
+        .heat-4 { background-color: #81c784; }
+        .heat-full { background-color: #4caf50; color: white; }
+        
+        /* Cruise Ribbons */
+        .ribbons-container { position: absolute; top: 50px; left: 0; right: 0; bottom: 0; pointer-events: none; }
+        .cruise-span { 
+            position: absolute; 
+            height: 24px; 
+            border-radius: 12px; 
+            background: rgba(5,122,147,0.85); 
+            color: #fff; 
+            font-size: 0.75rem; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 10px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+            pointer-events: auto; 
+            transition: all 0.2s ease; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
             cursor: pointer;
+            z-index: 10;
         }
-        .cal-cell-header:hover {
-            color: #2563eb;
-            background-color: rgba(37, 99, 235, 0.05);
+        .cruise-span:hover { 
+            background: #e65100; 
+            z-index: 20; 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
         }
+        .cruise-span.dimmed { opacity: 0.2; }
+        .cruise-span.highlighted { background: #e65100; z-index: 20; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
     </style>
 </head>
-<body class="bg-gray-50 flex h-screen overflow-hidden text-gray-800 font-sans">
+<body>
 
-    <!-- SIDEBAR: Controls & Filters -->
-    <aside class="w-80 bg-white border-r border-gray-200 flex flex-col shadow-lg z-20 flex-shrink-0">
-        <div class="p-6 border-b border-gray-100 bg-blue-900 text-white">
-            <h1 class="text-2xl font-extrabold flex items-center gap-2 mb-1">
-                <i data-lucide="ship" class="w-6 h-6"></i> Cruise Planner
-            </h1>
-            <p class="text-blue-200 text-sm">Find overlaps & budget deals</p>
-        </div>
-
-        <div class="p-5 border-b border-gray-100 bg-gray-50" id="upload-section">
-            <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-1">
-                <i data-lucide="database" class="w-4 h-4"></i> 1. Load Data File
-            </h2>
-            <input type="file" id="json-upload" accept=".json" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 cursor-pointer outline-none transition-colors">
-            <p class="text-[11px] text-gray-500 mt-2" id="auto-load-status">Attempting to auto-load <span class="font-mono bg-gray-200 px-1 rounded text-gray-700">cruises.json</span>...</p>
-        </div>
-
-        <div class="p-5 border-b border-gray-100 bg-white">
-            <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-1">
-                <i data-lucide="filter" class="w-4 h-4"></i> 2. Budget Filter
-            </h2>
-            <div class="flex items-center gap-3">
-                <label for="max-price" class="text-sm font-medium">Max Price (€):</label>
-                <input type="number" id="max-price" value="700" class="w-24 px-3 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm font-bold text-blue-700">
+    <div class="header">
+        <h1>🛳️ Kreuzfahrt Gruppen-Kalender (Juli - Okt 2026)</h1>
+        <div class="controls">
+            <div class="control-group">
+                <label>Maximalpreis (€)</label>
+                <input type="number" id="maxPrice" value="700" step="50" style="width: 80px;" onchange="loadData()">
             </div>
-            <p class="text-[10px] text-gray-400 mt-2 leading-tight">Only cruises strictly under this price will be drawn on the calendar.</p>
-        </div>
-
-        <div class="p-5 border-b border-gray-100 bg-gray-50">
-            <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex justify-between items-center">
-                <span class="flex items-center gap-1"><i data-lucide="users" class="w-4 h-4"></i> 3. Group Availability</span>
-                <button id="add-user-btn" class="text-blue-600 hover:text-blue-800 bg-blue-100 p-1 rounded hover:bg-blue-200 transition" title="Add another person">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
-                </button>
-            </h2>
-            <div class="mb-3">
-                <label class="text-sm font-medium block mb-1">Marking calendar for:</label>
-                <select id="user-select" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white cursor-pointer shadow-sm">
-                    <!-- Users injected here -->
-                </select>
-            </div>
-            <p class="text-[11px] leading-tight text-gray-500 italic">Click the date numbers on the calendar to toggle free time for this person.</p>
-        </div>
-
-        <div class="flex-1 overflow-y-auto p-5 flex flex-col gap-3" id="cruise-list-container">
-            <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center sticky top-0 bg-white z-10 py-1">
-                <span class="flex items-center gap-1"><i data-lucide="list" class="w-4 h-4"></i> 4. Matching Deals</span>
-                <span id="cruise-count" class="bg-blue-100 text-blue-800 py-0.5 px-2 rounded-full text-[10px]">0</span>
-            </h2>
-            
-            <div id="loading" class="text-center py-10">
-                <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-blue-500 mx-auto mb-2"></i>
-                <p class="text-sm text-gray-500">Loading deals...</p>
-            </div>
-            
-            <div id="cruise-list" class="flex flex-col gap-2 pb-6">
-                <!-- Cruise cards injected here -->
+            <div class="control-group">
+                <label>Wer trägt ein?</label>
+                <div style="display: flex; gap: 5px;">
+                    <select id="userSelect" onchange="changeUser()"></select>
+                    <button class="btn-add" onclick="addUser()">+ Neu</button>
+                </div>
             </div>
         </div>
-    </aside>
+    </div>
 
-    <!-- MAIN: Calendar View -->
-    <main class="flex-1 flex flex-col h-screen overflow-hidden bg-gray-100">
-        <div class="bg-white p-4 shadow-sm border-b border-gray-200 flex justify-between items-center z-10 flex-shrink-0">
-            <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                <i data-lucide="calendar-days" class="w-5 h-5 text-blue-600"></i>
-                Availability Heatmap & Cruise Timeline
-            </h2>
-            <div class="flex items-center gap-4 text-xs font-medium text-gray-500 border border-gray-200 rounded-full px-3 py-1.5 bg-gray-50">
-                <span class="font-bold text-gray-700 mr-1">Group Free Time:</span>
-                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-sm border border-gray-300 bg-white"></div> 0%</div>
-                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-sm bg-green-200 border border-green-300"></div> Partial</div>
-                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-sm bg-green-500 border border-green-600"></div> 100% All</div>
+    <div class="main-container">
+        <div class="sidebar">
+            <h2>Gefilterte Reisen (<span id="cruiseCount">0</span>)</h2>
+            <div id="cruiseList"></div>
+        </div>
+
+        <div class="calendar-wrapper">
+            <div class="calendar-scroll">
+                <div class="months-row" id="monthsRow"></div>
+                <div class="days-row" id="daysRow">
+                    <div class="ribbons-container" id="ribbonsContainer"></div>
+                </div>
             </div>
         </div>
-
-        <div class="flex-1 overflow-y-auto p-6" id="calendar-canvas">
-            <!-- Months injected here -->
-        </div>
-    </main>
+    </div>
 
     <script>
-        const state = {
-            rawCruises: [],
-            filteredCruises: [],
-            maxPrice: 700,
-            users: ['User 1', 'User 2'],
-            currentUser: 'User 1',
-            availability: {
-                'User 1': new Set(),
-                'User 2': new Set()
-            },
-            hoveredCruiseId: null,
-            maxTracksNeeded: 0,
-            // Premium tailwind colors for cruise ribbons
-            colors: ['bg-blue-500', 'bg-indigo-500', 'bg-purple-500', 'bg-pink-500', 'bg-rose-500', 'bg-orange-500', 'bg-teal-500', 'bg-cyan-600']
-        };
+        // --- CALENDAR SETUP ---
+        const startDate = new Date(2026, 6, 1); // July 1, 2026
+        const endDate = new Date(2026, 9, 31);  // October 31, 2026
+        const totalDays = Math.round((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+        
+        let cruisesData = [];
+        
+        // --- USER & LOCALSTORAGE SETUP ---
+        let users = JSON.parse(localStorage.getItem('cruise_users')) || ['User 1', 'User 2'];
+        let currentUser = users[0];
+        let availability = JSON.parse(localStorage.getItem('cruise_availability')) || {};
 
-        // Configuration for the required months
-        const MONTHS_CFG = [
-            { year: 2026, month: 6, name: "July 2026" },      // Month is 0-indexed in JS (6 = July)
-            { year: 2026, month: 7, name: "August 2026" },
-            { year: 2026, month: 8, name: "September 2026" },
-            { year: 2026, month: 9, name: "October 2026" }
-        ];
+        function initUsers() {
+            const select = document.getElementById('userSelect');
+            select.innerHTML = '';
+            users.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u;
+                opt.textContent = u;
+                if(u === currentUser) opt.selected = true;
+                select.appendChild(opt);
+            });
+        }
 
-        // DOM Elements mapping
-        const els = {
-            jsonUpload: document.getElementById('json-upload'),
-            maxPrice: document.getElementById('max-price'),
-            userSelect: document.getElementById('user-select'),
-            addUserBtn: document.getElementById('add-user-btn'),
-            cruiseList: document.getElementById('cruise-list'),
-            cruiseCount: document.getElementById('cruise-count'),
-            calendarCanvas: document.getElementById('calendar-canvas'),
-            loading: document.getElementById('loading'),
-            statusText: document.getElementById('auto-load-status')
-        };
+        function changeUser() {
+            currentUser = document.getElementById('userSelect').value;
+        }
 
-        async function init() {
-            lucide.createIcons();
-            setupEventListeners();
-            renderUserSelect();
-            renderCalendar(); 
-            
-            // 1. Attempt to auto-fetch the JSON file
-            try {
-                const res = await fetch('cruises.json');
-                if (!res.ok) throw new Error("Could not find cruises.json locally.");
-                
-                const data = await res.json();
-                els.statusText.innerHTML = `<span class="text-green-600 font-bold flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Successfully auto-loaded cruises.json!</span>`;
-                lucide.createIcons();
-                processData(data);
-            } catch (err) {
-                console.warn("Auto-load failed. Waiting for manual upload.", err);
-                els.statusText.innerHTML = `<span class="text-amber-600 font-bold">Not found. Please upload cruises.json manually.</span>`;
-                els.cruiseList.innerHTML = `<div class="p-6 border-2 border-dashed border-gray-300 rounded-lg text-center bg-gray-50"><p class="text-gray-500 text-sm">Please upload <b>cruises.json</b> using the button in the top left.</p></div>`;
-            } finally {
-                els.loading.classList.add('hidden');
+        function addUser() {
+            const name = prompt("Name der neuen Person:");
+            if(name && !users.includes(name)) {
+                users.push(name);
+                localStorage.setItem('cruise_users', JSON.stringify(users));
+                currentUser = name;
+                initUsers();
+                renderCalendar();
             }
         }
 
-        function setupEventListeners() {
-            // Manual File Upload
-            els.jsonUpload.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                
-                els.loading.classList.remove('hidden');
-                els.cruiseList.innerHTML = '';
-                els.statusText.innerText = "Parsing uploaded file...";
-                
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    try {
-                        const data = JSON.parse(event.target.result);
-                        els.statusText.innerHTML = `<span class="text-green-600 font-bold">Successfully loaded manual file!</span>`;
-                        processData(data);
-                    } catch (error) {
-                        els.statusText.innerHTML = `<span class="text-red-600 font-bold">Error parsing JSON file.</span>`;
-                        console.error(error);
-                    } finally {
-                        els.loading.classList.add('hidden');
-                    }
-                };
-                reader.readAsText(file);
-            });
-
-            // Max Price Filter
-            els.maxPrice.addEventListener('input', (e) => {
-                const val = parseInt(e.target.value);
-                if (!isNaN(val)) {
-                    state.maxPrice = val;
-                    applyFilters(); // Re-filter and re-render everything
-                }
-            });
-
-            // User Selection
-            els.userSelect.addEventListener('change', (e) => {
-                state.currentUser = e.target.value;
-                renderCalendar(); // Re-render to show active user selection borders
-            });
-
-            // Add User Button
-            els.addUserBtn.addEventListener('click', () => {
-                const newNum = state.users.length + 1;
-                const newName = `User ${newNum}`;
-                state.users.push(newName);
-                state.availability[newName] = new Set();
-                state.currentUser = newName;
-                renderUserSelect();
-                renderCalendar(); // Re-render colors based on new denominator
-            });
-        }
-
-        function processData(data) {
-            // Parse strings to Dates and normalize prices
-            state.rawCruises = data.map((c, i) => {
-                // Parse "DD.MM.YYYY" strictly
-                const parts = c.date.split('.'); 
-                const start = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-                
-                const end = new Date(start);
-                end.setDate(end.getDate() + c.duration_days - 1);
-                
-                const price = c.prices_per_person ? (c.prices_per_person['2_adults'] || 99999) : 99999;
-                
-                return {
-                    ...c,
-                    parsedDate: start,
-                    parsedEnd: end,
-                    price: price,
-                    colorClass: state.colors[i % state.colors.length],
-                    internalId: `cruise-${i}` // Guarantee a unique ID for DOM hooking
-                };
-            });
-
-            applyFilters();
-        }
-
-        function applyFilters() {
-            // 1. Filter by budget
-            state.filteredCruises = state.rawCruises.filter(c => c.price <= state.maxPrice);
+        function toggleDay(dateStr) {
+            if(!availability[currentUser]) availability[currentUser] = {};
+            availability[currentUser][dateStr] = !availability[currentUser][dateStr];
             
-            // 2. Sort chronologically, then by price
-            state.filteredCruises.sort((a, b) => a.parsedDate - b.parsedDate || a.price - b.price);
-            
-            // 3. Assign Tracks (Interval Graph Coloring)
-            // This ensures overlapping cruises are stacked vertically across the days
-            const tracks = []; 
-            state.filteredCruises.forEach(c => {
-                let placed = false;
-                for (let i = 0; i < tracks.length; i++) {
-                    // If track is free on the start date
-                    if (c.parsedDate > tracks[i]) {
-                        tracks[i] = c.parsedEnd; // Occupy track until end date
-                        c.track = i;
-                        placed = true;
-                        break;
-                    }
-                }
-                if (!placed) {
-                    c.track = tracks.length;
-                    tracks.push(c.parsedEnd);
-                }
-            });
-            
-            state.maxTracksNeeded = tracks.length;
-            
-            // 4. Render Updates
-            els.cruiseCount.innerText = state.filteredCruises.length;
-            renderCruiseList();
+            localStorage.setItem('cruise_availability', JSON.stringify(availability));
             renderCalendar();
         }
 
-        function renderUserSelect() {
-            els.userSelect.innerHTML = state.users.map(u => 
-                `<option value="${u}" ${u === state.currentUser ? 'selected' : ''}>${u}</option>`
-            ).join('');
+        function getHeatClass(dateStr) {
+            let count = 0;
+            users.forEach(u => {
+                if(availability[u] && availability[u][dateStr]) count++;
+            });
+            if(count === 0) return '';
+            if(count === users.length) return 'heat-full';
+            if(count === 1) return 'heat-1';
+            if(count === 2) return 'heat-2';
+            if(count === 3) return 'heat-3';
+            return 'heat-4';
         }
 
-        function renderCruiseList() {
-            if (state.filteredCruises.length === 0) {
-                els.cruiseList.innerHTML = `<div class="p-4 border-2 border-dashed border-gray-200 rounded-lg text-center"><p class="text-gray-400 text-xs">No cruises under €${state.maxPrice}</p></div>`;
-                return;
-            }
-
-            const html = state.filteredCruises.map(c => `
-                <div class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer cruise-card border-l-4" 
-                     style="border-left-color: var(--tw-color-${c.colorClass.split('-')[1]}-500, #3b82f6);"
-                     data-id="${c.internalId}"
-                     onmouseenter="highlightCruise('${c.internalId}')" 
-                     onmouseleave="clearHighlight()">
-                    <div class="flex justify-between items-start mb-1">
-                        <h3 class="font-bold text-xs text-gray-800 leading-tight">${c.title}</h3>
-                        <span class="font-black text-blue-700 text-sm">€${c.price}</span>
-                    </div>
-                    <div class="text-[10px] text-gray-500 mb-1 flex items-center gap-1">
-                        <i data-lucide="anchor" class="w-3 h-3"></i> ${c.ship}
-                    </div>
-                    <div class="flex justify-between items-center text-[10px]">
-                        <span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">${c.date}</span>
-                        <span class="font-medium text-gray-600">${c.duration_days} Days</span>
-                    </div>
-                </div>
-            `).join('');
+        function buildCalendarGrid() {
+            const monthsRow = document.getElementById('monthsRow');
+            const daysRow = document.getElementById('daysRow');
             
-            els.cruiseList.innerHTML = html;
-            lucide.createIcons();
+            Array.from(daysRow.children).forEach(c => {
+                if(c.id !== 'ribbonsContainer') c.remove();
+            });
+            monthsRow.innerHTML = '';
+
+            let currentMonth = -1;
+            let monthDays = 0;
+            let monthEl = null;
+
+            for(let i=0; i < totalDays; i++) {
+                const d = new Date(startDate);
+                d.setDate(startDate.getDate() + i);
+                const dateStr = d.toISOString().split('T')[0];
+                
+                if(d.getMonth() !== currentMonth) {
+                    if(monthEl) monthEl.style.flex = monthDays;
+                    currentMonth = d.getMonth();
+                    monthDays = 0;
+                    monthEl = document.createElement('div');
+                    monthEl.className = 'month-header';
+                    monthEl.textContent = d.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                    monthsRow.appendChild(monthEl);
+                }
+                monthDays++;
+
+                const dayEl = document.createElement('div');
+                dayEl.className = `day-cell ${d.getDay() === 0 || d.getDay() === 6 ? 'weekend' : ''} ${getHeatClass(dateStr)}`;
+                dayEl.onclick = () => toggleDay(dateStr);
+                
+                const numEl = document.createElement('div');
+                numEl.className = 'day-num';
+                numEl.textContent = d.getDate();
+                
+                const nameEl = document.createElement('div');
+                nameEl.className = 'day-name';
+                nameEl.textContent = d.toLocaleString('de-DE', { weekday: 'short' });
+
+                dayEl.appendChild(numEl);
+                dayEl.appendChild(nameEl);
+                daysRow.appendChild(dayEl);
+            }
+            if(monthEl) monthEl.style.flex = monthDays;
+        }
+
+        // --- CRUISE RENDERING LOGIC ---
+        function parseGermanDate(dateStr) {
+            const parts = dateStr.split('.');
+            return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+
+        function loadData() {
+            fetch('cruises.json')
+                .then(response => response.json())
+                .then(data => {
+                    cruisesData = data;
+                    renderCalendar();
+                })
+                .catch(err => {
+                    console.error("Error loading cruises.json:", err);
+                    document.getElementById('cruiseList').innerHTML = '<p style="color:red;">Konnte cruises.json nicht laden. Bitte stellen Sie sicher, dass die Datei im selben Ordner existiert.</p>';
+                });
         }
 
         function renderCalendar() {
-            let html = '';
+            buildCalendarGrid();
+            const maxPrice = parseInt(document.getElementById('maxPrice').value) || 700;
             
-            const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            // FILTER: Price <= maxPrice AND Duration >= 4 days
+            const filtered = cruisesData.filter(c => 
+                c.prices_per_person['2_adults'] <= maxPrice && 
+                c.duration_days >= 4
+            );
+            
+            filtered.sort((a,b) => parseGermanDate(a.date) - parseGermanDate(b.date));
+            
+            document.getElementById('cruiseCount').textContent = filtered.length;
+            
+            const listEl = document.getElementById('cruiseList');
+            const ribbonsEl = document.getElementById('ribbonsContainer');
+            listEl.innerHTML = '';
+            ribbonsEl.innerHTML = '';
 
-            MONTHS_CFG.forEach(monthCfg => {
-                // Determine days in month and starting day of week
-                const dateObj = new Date(monthCfg.year, monthCfg.month, 1);
-                const daysInMonth = new Date(monthCfg.year, monthCfg.month + 1, 0).getDate();
-                
-                // JS getDay() is 0=Sun. We want 0=Mon, 6=Sun.
-                let startDayOfWeek = dateObj.getDay() - 1;
-                if (startDayOfWeek === -1) startDayOfWeek = 6; 
+            const tracks = []; 
+            
+            filtered.forEach((cruise, index) => {
+                const cruiseStart = parseGermanDate(cruise.date);
+                const cruiseEnd = new Date(cruiseStart);
+                cruiseEnd.setDate(cruiseEnd.getDate() + cruise.duration_days - 1);
 
-                html += `
-                <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="bg-gray-50 px-4 py-2 border-b border-gray-200 font-bold text-gray-700 flex justify-between items-center">
-                        <span>${monthCfg.name}</span>
-                    </div>
-                    
-                    <!-- Days of week header -->
-                    <div class="grid grid-cols-7 border-b border-gray-200 bg-gray-100/50">
-                        ${daysOfWeek.map(d => `<div class="py-2 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">${d}</div>`).join('')}
-                    </div>
-                    
-                    <!-- Main Grid -->
-                    <div class="cal-grid">
+                if(cruiseEnd < startDate || cruiseStart > endDate) return;
+
+                const card = document.createElement('div');
+                card.className = 'cruise-card';
+                card.id = `card-${index}`;
+                card.innerHTML = `
+                    <h3>${cruise.ship} (${cruise.duration_days} Tage)</h3>
+                    <p><strong>Start:</strong> ${cruise.date}</p>
+                    <p><strong>Route:</strong> ${cruise.ports}</p>
+                    <div class="cruise-price">${cruise.prices_per_person['2_adults']} € p.P.</div>
                 `;
+                
+                card.onmouseenter = () => highlightRibbon(index, true);
+                card.onmouseleave = () => highlightRibbon(index, false);
+                card.onclick = () => window.open(cruise.url, '_blank');
+                listEl.appendChild(card);
 
-                // Empty cells before start of month
-                for (let i = 0; i < startDayOfWeek; i++) {
-                    html += `<div class="cal-cell bg-gray-50/50 opacity-50"></div>`;
+                let startOffsetDays = Math.round((cruiseStart - startDate) / (1000 * 60 * 60 * 24));
+                let drawDuration = cruise.duration_days;
+                
+                if (startOffsetDays < 0) {
+                    drawDuration += startOffsetDays;
+                    startOffsetDays = 0;
+                }
+                if (startOffsetDays + drawDuration > totalDays) {
+                    drawDuration = totalDays - startOffsetDays;
                 }
 
-                // Actual Days
-                for (let d = 1; d <= daysInMonth; d++) {
-                    const currentCellDate = new Date(monthCfg.year, monthCfg.month, d);
-                    // Format strictly to YYYY-MM-DD for Set matching
-                    const dateKey = `${monthCfg.year}-${String(monthCfg.month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                    
-                    // 1. Calculate Heatmap Availability
-                    let availableCount = 0;
-                    state.users.forEach(u => {
-                        if (state.availability[u].has(dateKey)) availableCount++;
-                    });
-                    
-                    let bgClass = "bg-white";
-                    let borderClass = "";
-                    if (availableCount > 0) {
-                        const pct = availableCount / state.users.length;
-                        if (pct === 1) bgClass = "bg-green-100";
-                        else if (pct >= 0.5) bgClass = "bg-green-50";
-                        else bgClass = "bg-green-50/50";
+                const leftPercent = (startOffsetDays / totalDays) * 100;
+                const widthPercent = (drawDuration / totalDays) * 100;
+
+                let trackIndex = 0;
+                while(true) {
+                    if(!tracks[trackIndex]) {
+                        tracks[trackIndex] = cruiseEnd;
+                        break;
                     }
-
-                    // Active User highlight
-                    if (state.availability[state.currentUser].has(dateKey)) {
-                        borderClass = "ring-2 ring-inset ring-blue-400";
+                    if(tracks[trackIndex] < cruiseStart) {
+                        tracks[trackIndex] = cruiseEnd;
+                        break;
                     }
-
-                    // 2. Identify Cruises happening on this exact day
-                    const activeCruisesOnDay = Array(state.maxTracksNeeded).fill(null);
-                    state.filteredCruises.forEach(c => {
-                        // Strip time for clean comparison
-                        const s = new Date(c.parsedDate.getFullYear(), c.parsedDate.getMonth(), c.parsedDate.getDate()).getTime();
-                        const e = new Date(c.parsedEnd.getFullYear(), c.parsedEnd.getMonth(), c.parsedEnd.getDate()).getTime();
-                        const curr = currentCellDate.getTime();
-                        
-                        if (curr >= s && curr <= e) {
-                            activeCruisesOnDay[c.track] = c;
-                        }
-                    });
-
-                    // 3. Build Cruise Ribbons/Chips
-                    const ribbonsHtml = activeCruisesOnDay.map((cruise, trackIdx) => {
-                        if (!cruise) {
-                            // Empty spacer to maintain vertical alignment of tracks across days
-                            return `<div class="h-5 mb-1 w-full opacity-0 pointer-events-none"></div>`;
-                        }
-
-                        // Determine shape of ribbon based on position in trip
-                        const sTime = cruise.parsedDate.getTime();
-                        const eTime = cruise.parsedEnd.getTime();
-                        const currTime = currentCellDate.getTime();
-                        
-                        const isStart = currTime === sTime;
-                        const isEnd = currTime === eTime;
-                        
-                        let shapeClasses = "";
-                        let labelHtml = "";
-                        
-                        if (isStart && isEnd) {
-                            shapeClasses = "rounded px-1.5";
-                            labelHtml = `€${cruise.price}`;
-                        } else if (isStart) {
-                            shapeClasses = "rounded-l pl-1.5 border-r-0";
-                            labelHtml = `€${cruise.price} • ${cruise.ship}`;
-                        } else if (isEnd) {
-                            shapeClasses = "rounded-r pr-1.5 border-l-0";
-                        } else {
-                            shapeClasses = "rounded-none border-x-0";
-                        }
-
-                        return `
-                            <div class="h-5 mb-1 w-full flex items-center text-[9px] font-bold text-white overflow-hidden whitespace-nowrap shadow-sm cruise-ribbon ${cruise.colorClass} ${shapeClasses}" 
-                                 data-ribbon-id="${cruise.internalId}"
-                                 title="${cruise.title} (€${cruise.price})"
-                                 onmouseenter="highlightCruise('${cruise.internalId}')" 
-                                 onmouseleave="clearHighlight()">
-                                ${labelHtml}
-                            </div>
-                        `;
-                    }).join('');
-
-                    // Construct the Cell
-                    html += `
-                        <div class="cal-cell ${bgClass} ${borderClass} overflow-hidden" id="cell-${dateKey}">
-                            <div class="cal-cell-header no-select" onclick="toggleAvailability('${dateKey}')">
-                                ${d}
-                            </div>
-                            <div class="flex-1 w-full px-0 py-1 flex flex-col relative z-0">
-                                ${ribbonsHtml}
-                            </div>
-                        </div>
-                    `;
+                    trackIndex++;
                 }
 
-                // Fill remaining cells at end of month
-                const totalCells = startDayOfWeek + daysInMonth;
-                const remaining = (7 - (totalCells % 7)) % 7;
-                for (let i = 0; i < remaining; i++) {
-                    html += `<div class="cal-cell bg-gray-50/50 opacity-50"></div>`;
-                }
+                const ribbon = document.createElement('div');
+                ribbon.className = 'cruise-span';
+                ribbon.id = `ribbon-${index}`;
+                ribbon.style.left = `${leftPercent}%`;
+                ribbon.style.width = `${widthPercent}%`;
+                ribbon.style.top = `${trackIndex * 28}px`; 
+                
+                // Embed Route directly into the ribbon UI
+                ribbon.innerHTML = `<strong>${cruise.ship}</strong>: ${cruise.ports} (${cruise.prices_per_person['2_adults']}€)`;
+                ribbon.title = `${cruise.title}\nSchiff: ${cruise.ship}\nRoute: ${cruise.ports}\nPreis: ${cruise.prices_per_person['2_adults']}€`;
+                
+                ribbon.onclick = () => window.open(cruise.url, '_blank');
+                ribbon.onmouseenter = () => highlightRibbon(index, true);
+                ribbon.onmouseleave = () => highlightRibbon(index, false);
 
-                html += `</div></div>`; // Close Grid & Month container
+                ribbonsEl.appendChild(ribbon);
             });
-
-            els.calendarCanvas.innerHTML = html;
+            
+            const requiredHeight = (tracks.length * 28) + 50; 
+            document.querySelectorAll('.day-cell').forEach(el => {
+                el.style.minHeight = `${Math.max(500, requiredHeight)}px`;
+            });
         }
 
-        // Called when a user clicks the day number header
-        window.toggleAvailability = function(dateKey) {
-            const set = state.availability[state.currentUser];
-            if (set.has(dateKey)) {
-                set.delete(dateKey);
+        function highlightRibbon(index, isHovering) {
+            const ribbons = document.querySelectorAll('.cruise-span');
+            ribbons.forEach(r => {
+                if(isHovering) {
+                    if(r.id === `ribbon-${index}`) r.classList.add('highlighted');
+                    else r.classList.add('dimmed');
+                } else {
+                    r.classList.remove('highlighted', 'dimmed');
+                }
+            });
+            
+            if(isHovering) {
+                const card = document.getElementById(`card-${index}`);
+                if(card) card.style.borderColor = '#e65100';
             } else {
-                set.add(dateKey);
+                const card = document.getElementById(`card-${index}`);
+                if(card) card.style.borderColor = '#eee';
             }
-            renderCalendar(); // Extremely fast re-render with Vanilla JS
-        };
+        }
 
-        // Cross-highlighting logic
-        window.highlightCruise = function(cruiseId) {
-            if (state.hoveredCruiseId === cruiseId) return;
-            state.hoveredCruiseId = cruiseId;
+        initUsers();
+        loadData();
 
-            // Highlight in sidebar list
-            const cards = document.querySelectorAll('.cruise-card');
-            cards.forEach(card => {
-                if (card.dataset.id === cruiseId) {
-                    card.classList.remove('dimmed');
-                    card.classList.add('ring-2', 'ring-blue-500', 'shadow-md');
-                } else {
-                    card.classList.add('dimmed');
-                    card.classList.remove('ring-2', 'ring-blue-500', 'shadow-md');
-                }
-            });
-
-            // Highlight on calendar ribbons
-            const ribbons = document.querySelectorAll('.cruise-ribbon');
-            ribbons.forEach(rib => {
-                if (rib.dataset.ribbonId === cruiseId) {
-                    rib.classList.remove('opacity-30');
-                    rib.style.filter = 'brightness(0.85)';
-                    rib.style.transform = 'scaleY(1.1)';
-                    rib.style.zIndex = '10';
-                } else {
-                    rib.classList.add('opacity-30');
-                    rib.style.filter = '';
-                    rib.style.transform = '';
-                    rib.style.zIndex = '0';
-                }
-            });
-        };
-
-        window.clearHighlight = function() {
-            state.hoveredCruiseId = null;
-
-            // Reset sidebar list
-            const cards = document.querySelectorAll('.cruise-card');
-            cards.forEach(card => {
-                card.classList.remove('dimmed', 'ring-2', 'ring-blue-500', 'shadow-md');
-            });
-
-            // Reset calendar ribbons
-            const ribbons = document.querySelectorAll('.cruise-ribbon');
-            ribbons.forEach(rib => {
-                rib.classList.remove('opacity-30');
-                rib.style.filter = '';
-                rib.style.transform = '';
-                rib.style.zIndex = '0';
-            });
-        };
-
-        // Start the application
-        init();
     </script>
-
 </body>
 </html>
