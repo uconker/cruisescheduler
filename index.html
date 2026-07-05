@@ -131,7 +131,7 @@
             els.loading.classList.remove('hidden');
             try {
                 // Fetch the exact file requested
-                const res = await fetch('cruises(1).json');
+                const res = await fetch('cruises.json');
                 if (!res.ok) throw new Error("Failed to load JSON");
                 state.rawCruises = await res.json();
                 
@@ -151,7 +151,7 @@
                 applyFilters();
             } catch (err) {
                 console.error(err);
-                els.cruiseList.innerHTML = `<p class="text-red-500 text-sm p-4 text-center">Error loading cruises(1).json. Make sure the file exists in the directory.</p>`;
+                els.cruiseList.innerHTML = `<p class="text-red-500 text-sm p-4 text-center">Error loading cruises.json. Make sure the file exists in the directory.</p>`;
             } finally {
                 els.loading.classList.add('hidden');
             }
